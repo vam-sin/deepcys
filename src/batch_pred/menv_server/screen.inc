@@ -1,0 +1,7 @@
+C
+C	parameters for scrrening function D(r)
+C
+	REAL*8 D0(3),D00(3),LAM(3),LAM0(3),EXPV(50)
+        INTEGER IEXP(50)
+	DATA D00,LAM0/3*9.3244,3*0.0035660/
+	COMMON/SCRN/D0,LAM,EXPV,IEXP,NEXP

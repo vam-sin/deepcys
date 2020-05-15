@@ -1,0 +1,33 @@
+#! /bin/csh -f
+#
+#       script to generate crd files from pdb files using simulaid
+#
+       foreach v (`cat $1`)
+        echo $v
+        set psf = `echo $v:r`-psf
+        set psf2 = $psf.pdb
+        set menv = `echo $psf:r`.menv
+        set crd  = `echo $psf:r`.crd
+        set out = `echo $psf:r`.out
+        set newmenv = `echo $v:r`-new.menv
+        cp $v temp
+/home/banshee/Academics/Sem6/BioFormal/Cysteine/dataset/ThioEther/menv-server/psfgen /home/banshee/Academics/Sem6/BioFormal/Cysteine/dataset/ThioEther/menv-server/psf-pdb-gen-standalone.tcl $v $psf
+set atomnum = `grep "ATOM" $psf2 | wc | awk '{print $1}'`
+/home/banshee/Academics/Sem6/BioFormal/Cysteine/dataset/ThioEther/menv-server/psfpdb-crd-conv2 $psf2 $crd $atomnum
+/home/banshee/Academics/Sem6/BioFormal/Cysteine/dataset/ThioEther/menv-server/micro_debug_<<fin>$out
+CHM
+$crd
+/home/banshee/Academics/Sem6/BioFormal/Cysteine/dataset/ThioEther/menv-server/esp_all_env_allradii.dat
+/home/banshee/Academics/Sem6/BioFormal/Cysteine/dataset/ThioEther/menv-server/smenv_allh.dat
+$menv
+fin
+/home/banshee/Academics/Sem6/BioFormal/Cysteine/dataset/ThioEther/menv-server/ssbond.exe < $crd
+foreach v2 ( `cat $2` )
+echo $v2
+sed s/"$v2,  CYS,       2,  TO,"/"$v2,  CYS,       2,  TD,"/ $menv >temp2
+cp temp2 $menv
+sh /home/banshee/Academics/Sem6/BioFormal/Cysteine/dataset/ThioEther/menv-server/newrenumber.sh $v $menv
+# python3 plotting.py $newmenv
+end
+end
+
