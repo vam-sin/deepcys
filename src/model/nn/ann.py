@@ -39,51 +39,51 @@ nf1_13 = pickle.load(infile)
 infile.close()
 
 # # Amino Acid Signatures in the Interaction Shells (NF2)
-infile = open('../features/NF1/feature/NF2_8.pickle','rb')
+infile = open('../features/NF2/feature/NF2_8.pickle','rb')
 nf2_8 = pickle.load(infile)
 infile.close()
-infile = open('../features/NF1/feature/NF2_7.pickle','rb')
+infile = open('../features/NF2/feature/NF2_7.pickle','rb')
 nf2_7 = pickle.load(infile)
 infile.close()
-infile = open('../features/NF1/feature/NF2_6.pickle','rb')
+infile = open('../features/NF2/feature/NF2_6.pickle','rb')
 nf2_6 = pickle.load(infile)
 infile.close()
-infile = open('../features/NF1/feature/NF2_5.pickle','rb')
+infile = open('../features/NF2/feature/NF2_5.pickle','rb')
 nf2_5 = pickle.load(infile)
 infile.close()
 
 # # # Protein Class features (NF3)
-infile = open('../features/NF1/feature/NF3.pickle','rb')
+infile = open('../features/NF3/feature/NF3.pickle','rb')
 nf3 = pickle.load(infile)
 infile.close()
 
 # # # # Motif (NF4)
-infile = open('../features/NF1/feature/NF4_13.pickle','rb')
+infile = open('../features/NF4/feature/NF4_13.pickle','rb')
 nf4_13 = pickle.load(infile)
 infile.close()
 
-infile = open('../features/NF1/feature/NF4_11.pickle','rb')
+infile = open('../features/NF4/feature/NF4_11.pickle','rb')
 nf4_11 = pickle.load(infile)
 infile.close()
 
-infile = open('../features/NF1/feature/NF4_9.pickle','rb')
+infile = open('../features/NF4/feature/NF4_9.pickle','rb')
 nf4_9 = pickle.load(infile)
 infile.close()
 
-infile = open('../features/NF1/feature/NF4_7.pickle','rb')
+infile = open('../features/NF4/feature/NF4_7.pickle','rb')
 nf4_7 = pickle.load(infile)
 infile.close()
 
-infile = open('../features/NF1/feature/NF4_5.pickle','rb')
+infile = open('../features/NF4/feature/NF4_5.pickle','rb')
 nf4_5 = pickle.load(infile)
 infile.close()
 
-infile = open('../features/NF1/feature/NF4_3.pickle','rb')
+infile = open('../features/NF4/feature/NF4_3.pickle','rb')
 nf4_3 = pickle.load(infile)
 infile.close()
 
 # # # # Protein Primary Sequence features (NF5)
-infile = open('../features/NF1/feature/NF5_13.pickle','rb')
+infile = open('../features/NF5/feature/NF5_13.pickle','rb')
 nf5_13 = pickle.load(infile)
 infile.close()
 
@@ -119,7 +119,7 @@ X_train, X_test, y_train, y_test = train_test_split(X.values, y, test_size=0.1, 
 X_train = np.expand_dims(X_train,axis=2)
 X_test = np.expand_dims(X_test,axis=2)
 
-NN (Skip Connections) Model
+# NN (Skip Connections) Model
 input_ = Input(shape = (len(X.columns),1,))
 # x = GaussianNoise(0.5)(input_)
 x = Conv1D(128, (3), padding = 'same')(input_)

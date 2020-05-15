@@ -19,7 +19,7 @@ from sklearn.preprocessing import StandardScaler, LabelEncoder
 window = 13
 
 # dataset import and preprocessing
-ds = pd.read_excel('../data/dataset.xlsx')
+ds = pd.read_excel('../../data/dataset.xlsx')
 pdb = ds.iloc[:,1]
 print(pdb)
 res = ds.iloc[:,2]
@@ -36,13 +36,13 @@ chain = ds.iloc[:,3]
 
 ssf_list = []
 p = PDBParser()
-last_file = '../../../pdb/1b2l.pdb'
+last_file = '../../../../pdb/1b2l.pdb'
 last_dssp = dssp_dict_from_pdb_file(last_file)
 for i in range(len(pdb)):
 	pdb_id = str(pdb[i])
 	print(pdb_id)
 	try:
-		file = '../../../pdb/' + pdb_id.lower() +'.pdb'
+		file = '../../../../pdb/' + pdb_id.lower() +'.pdb'
 		if file == last_file:
 			dssp = last_dssp
 		else:
@@ -50,7 +50,7 @@ for i in range(len(pdb)):
 			dssp = dssp_dict_from_pdb_file(file)
 			last_dssp = dssp
 	except:
-		file = '../../../pdb/' + pdb_id.upper() +'.pdb'
+		file = '../../../../pdb/' + pdb_id.upper() +'.pdb'
 		if file == last_file:
 			dssp = last_dssp
 		else:

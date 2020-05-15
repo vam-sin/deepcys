@@ -12,7 +12,7 @@ parser = PDBParser()
 radius = 6
 
 # read structure from file
-ds = pd.read_excel('../data/dataset.xlsx')
+ds = pd.read_excel('../../data/dataset.xlsx')
 pdb = ds.iloc[:,1].tolist()
 resid = ds['resid'].tolist()
 chain_ = ds['chain'].tolist()
@@ -31,10 +31,10 @@ for i in range(len(pdb)):
 	inshell_proteins_single_8 = np.zeros(22, dtype = int) 
 	print(pdb[i])
 	try:
-		path_ = '../../../pdb/' + str(pdb[i]).lower() + '.pdb'
+		path_ = '../../../../pdb/' + str(pdb[i]).lower() + '.pdb'
 		structure = parser.get_structure('PHA-L', path_)
 	except:
-		path_ = '../../../pdb/' + str(pdb[i]).upper() + '.pdb'
+		path_ = '../../../../pdb/' + str(pdb[i]).upper() + '.pdb'
 		structure = parser.get_structure('PHA-L', path_)
 	model = structure[0]
 	print(model)

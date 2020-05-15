@@ -3,16 +3,16 @@ import pandas as pd
 import pickle
 from sklearn.preprocessing import LabelEncoder
 
-ds = pd.read_excel('../data/dataset.xlsx')
+ds = pd.read_excel('../../data/dataset.xlsx')
 pdb = ds.iloc[:,1].values
 
 func = []
 for i in range(len(pdb)):
 	try:
-		path_ = '../../../pdb/' + str(pdb[i]).lower() + '.pdb'
+		path_ = '../../../../pdb/' + str(pdb[i]).lower() + '.pdb'
 		f = open(path_, "r")
 	except:
-		path_ = '../../../pdb/' + str(pdb[i]).upper() + '.pdb'
+		path_ = '../../../../pdb/' + str(pdb[i]).upper() + '.pdb'
 		f = open(path_, "r")
 
 	for x in f:

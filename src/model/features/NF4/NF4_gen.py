@@ -19,7 +19,7 @@ from sklearn.preprocessing import StandardScaler, LabelEncoder
 window = 13
 
 # dataset import and preprocessing
-ds = pd.read_excel('../data/dataset.xlsx')
+ds = pd.read_excel('../../data/dataset.xlsx')
 pdb = ds.iloc[:,1]
 # print(pdb)
 res = ds.iloc[:,2]
@@ -34,9 +34,9 @@ for i in range(len(pdb)):
 	print(pdb_id, i)
 	list_ind = 0
 	try:
-		file = '../../../fasta/' + pdb_id.upper() +'.fasta.txt'
+		file = '../../../../fasta/' + pdb_id.upper() +'.fasta.txt'
 	except:
-		file = '../../../fasta/' + pdb_id.lower() +'.fasta.txt'
+		file = '../../../../fasta/' + pdb_id.lower() +'.fasta.txt'
 
 	record = list(SeqIO.parse(file, "fasta"))
 	for j in range(len(record)):
