@@ -27,6 +27,8 @@ echo $v2
 sed s/"$v2,  CYS,       2,  TO,"/"$v2,  CYS,       2,  TD,"/ $menv >temp2
 cp temp2 $menv
 sh /home/banshee/Academics/Sem6/BioFormal/Cysteine/dataset/ThioEther/menv-server/newrenumber.sh $v $menv
+echo $v
+echo $menv
 # python3 plotting.py $newmenv
 end
 end
