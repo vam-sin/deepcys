@@ -81,11 +81,34 @@ python3 ann.py
 
 # Batch Prediction
 
-Folder /src/batch_pred.
+## Structure Based Prediction
+
+Folder /src/batch_pred_struct/menv_server
+
+Change the file location in the mentioned lines for all these files accordingly.
+
+new-psfgen-script.tcl : 7, 12.
+newrenumber.sh : 10, 33, 68, 99.
+psf-pdb-gen-standalone.tcl : 3.
+script3 : 14 (twice), 16, 17, 20, 21, 24, 29.
+temp-psfgen-scripts.tcl : 8.
+
+Folder /src/batch_pred_struct.
 In the file named "data.txt", mention the tuple of [PDB ID, Residue Number, Chain]. One in a line. Run the following command.
 
 ```python3
-python3 batch_pred.py
+python3 batch_pred_struct.py
+```
+
+In a file named "results.txt", the results from the batch prediction will be stored.
+
+## Sequence Based Prediction
+
+Folder /src/batch_pred_seq.
+In the file named "data.txt", mention the tuple of [PDB ID, Residue Number, Chain]. One in a line. Run the following command.
+
+```python3
+python3 batch_pred_seq.py
 ```
 
 In a file named "results.txt", the results from the batch prediction will be stored.
