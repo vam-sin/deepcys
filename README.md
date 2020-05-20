@@ -87,11 +87,11 @@ Folder /src/batch_pred_struct/menv_server
 
 Change the file location in the mentioned lines for all these files accordingly.
 
-new-psfgen-script.tcl : 7, 12.
-newrenumber.sh : 10, 33, 68, 99.
-psf-pdb-gen-standalone.tcl : 3.
-script3 : 14 (twice), 16, 17, 20, 21, 24, 29.
-temp-psfgen-scripts.tcl : 8.
+new-psfgen-script.tcl : 7, 12.  <br/>
+newrenumber.sh : 10, 33, 68, 99.  <br/>
+psf-pdb-gen-standalone.tcl : 3.  <br/>
+script3 : 14 (twice), 16, 17, 20, 21, 24, 29.  <br/>
+temp-psfgen-scripts.tcl : 8.  <br/>
 
 Folder /src/batch_pred_struct.
 In the file named "data.txt", mention the tuple of [PDB ID, Residue Number, Chain]. One in a line. Run the following command.
