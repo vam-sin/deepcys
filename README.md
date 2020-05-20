@@ -73,10 +73,20 @@ python3 NF5_gen.py
 
 # Model Training
 
+## Structure Based Prediction
+
 Folder /src/model/nn.
 
 ```python3
 python3 ann.py
+```
+
+## Sequence Based Prediction
+
+Folder /src/model/nn.
+
+```python3
+python3 gru.py
 ```
 
 # Batch Prediction
