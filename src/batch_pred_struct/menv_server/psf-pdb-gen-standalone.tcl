@@ -1,6 +1,6 @@
 #!/usr/bin/tclsh
 
-set TOPOFILE /home/banshee/Academics/Sem6/BioFormal/Cysteine/dataset/ThioEther/menv-server/top_all27_prot_na.inp
+set TOPOFILE /home/vamsi/Academics/Sem6/BioFormal/deepcys_code/src/batch_pred_struct/menv_server/top_all27_prot_na.inp
 
 proc psfalias { } {
 

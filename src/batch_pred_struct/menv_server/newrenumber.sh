@@ -7,7 +7,7 @@
 
 filename=$(echo $1 | cut -f1 -d".")
 #echo ${filename}
-python3 /home/banshee/Academics/Sem6/BioFormal/Cysteine/dataset/ThioEther/menv-server/renum.py $1
+python3 /home/vamsi/Academics/Sem6/BioFormal/deepcys_code/src/batch_pred_struct/menv_server/renum.py $1
 
 #Takes the pdb file and prints unique resiudes
 cat pythonresults.txt | cut -f2 | uniq > uniqueresult.pdb
@@ -30,7 +30,7 @@ last_res_no=$(sed -e 1b -e '$!d' uniqueresidues.txt | awk 'NR==2{print $1}')
 #read menvfilename
 
 #Code that takes resiude number, residue and rHpy value
-python3 /home/banshee/Academics/Sem6/BioFormal/Cysteine/dataset/ThioEther/menv-server/renumCrd.py $2
+python3 /home/vamsi/Academics/Sem6/BioFormal/deepcys_code/src/batch_pred_struct/menv_server/renumCrd.py $2
 
 #Takes only the residues with value greater than 0
 cat Crdresults.txt | awk '($1 > 0)' Crdresults.txt > Menvresults.txt
@@ -65,7 +65,7 @@ awk '{printf("%3s ",$1); printf("%3s\n",$2);}' Menvresults.txt | uniq > uniqueMe
 # #Removing that particular residue in uniqueresidues file
 # awk '($1 != "'$lost_residue_no'")' uniqueresidues.txt > newuniqueresidues.txt
 
-python3 /home/banshee/Academics/Sem6/BioFormal/Cysteine/dataset/ThioEther/menv-server/residuesremoval.py
+python3 /home/vamsi/Academics/Sem6/BioFormal/deepcys_code/src/batch_pred_struct/menv_server/residuesremoval.py
 
 #Adding a column of numbers to this new file
 cat outfile.txt | awk '{print FNR "\t" $0}' outfile.txt > totalresidues.txt
@@ -96,4 +96,4 @@ awk '{print $1,$9,$10,$2,$3,$4,$5,$6,$7,$8}' finalcut.menv > commaremoved.menv
 cat commaremoved.menv | awk '{printf("%5s %5s %5s %5s %5s %5s %10s %10s %10s ",$1,$2,$3,$4,$5,$6,$7,$8,$9);printf("%10s\n",$10);}' > "$filename"-new.menv
 
 
-# python3 /home/banshee/Academics/Sem6/BioFormal/Cysteine/dataset/ThioEther/menv-server/plotting.py "$filename"-new.menv
+# python3 /home/vamsi/Academics/Sem6/BioFormal/deepcys_code/src/batch_pred_struct/menv_server/plotting.py "$filename"-new.menv

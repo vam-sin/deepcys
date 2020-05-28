@@ -4,12 +4,12 @@
 # (1) Split input PDB file into segments}
 exec grep -v "HETATM" 253l.pdb > 253l-protein.pdb
 
-#exec start /home/banshee/Academics/Sem6/BioFormal/Cysteine/dataset/ThioEther/menv-server/psfgen << edit
+#exec start /home/vamsi/Academics/Sem6/BioFormal/deepcys_code/src/batch_pred_struct/menv_server/psfgen << edit
 
 puts "say something"
 
 # (3) Read topology file
-topology /home/banshee/Academics/Sem6/BioFormal/Cysteine/dataset/ThioEther/menv-server/top_all27_prot_na.inp
+topology /home/vamsi/Academics/Sem6/BioFormal/deepcys_code/src/batch_pred_struct/menv_server/top_all27_prot_na.inp
 
 
 # (6) Read protein coordinates from PDB file

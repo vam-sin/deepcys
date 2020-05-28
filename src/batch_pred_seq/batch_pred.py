@@ -17,10 +17,13 @@ for x in f:
 
 g = open("results.txt", "w")
 
+g.write("PDB, Residue Number, Chain Letter, Cysteine Modification \n\n")
+
 for i in range(len(pdb)):
 	classes, prediction, pred_max = predict_class(pdb[i], res[i], chain[i])
 	val = str(classes[pred_max])
-	print(val)
-	g.write(val + "\n")
+	ch = chain[i].replace("\n", "")
+	g.write(pdb[i] + ", " + str(res[i]) + ", " + ch + ": " + val)
+	g.write("\n")
 
 g.close()

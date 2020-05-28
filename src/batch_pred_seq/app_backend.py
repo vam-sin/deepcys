@@ -5,8 +5,6 @@ from tensorflow.keras.models import load_model
 import pickle
 import os
 from feature_gen import get_nf1, get_nf2, get_nf3, get_nf4, get_nf5
-from pka_website import get_pka
-from Bf_rhpy_website import get_bf_rhpy
 import keras.backend.tensorflow_backend as tb
 tb._SYMBOLIC_SCOPE.value = True
 

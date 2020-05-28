@@ -1,1 +1,4 @@
-Disulphide
+PDB, Residue Number, Chain Letter, Cysteine Modification 
+
+1cvr, 221, A: Thioether
+1b2l, 137, A: Disulphide
