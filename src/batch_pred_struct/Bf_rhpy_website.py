@@ -2,6 +2,7 @@ import os
 import random
 
 def get_bf_rhpy(pdb, res, chain):
+	print(res, chain)
 	PROJECT_PATH = os.path.dirname(__file__) + "/"
 	pdbfile = PROJECT_PATH + 'PDB_Data/' + pdb + '.pdb'
 
@@ -24,19 +25,23 @@ def get_bf_rhpy(pdb, res, chain):
 	# Extract from result file
 	try:
 		result_file = os.path.join(PROJECT_PATH, 'PDB_Data', pdb + '-new.menv')
+		print("First time New Menv")
 		f = open(result_file, "r")
 		for x in f:
 			x = x.split(',')
 			residue_num = x[1].split(' ')
 			residue = int(residue_num[len(residue_num)-3])
 			atom = x[3]
-			ch = residue_num[len(residue_num)-6]
+			atom = atom.replace(' ', '')
+			ch = residue_num[5].replace(' ', '')
 			bf = float(x[4])
 			rhpy = float(x[7])
 
-			if (residue == res) and (ch == chain) and ((atom == 'TO') or (atom == 'TD')):
-				print("New Menv")
-				return bf, rhpy
+			if (int(residue) == int(res)) and (ch == chain.replace('\n', '')):
+				print("Half Match, Check Atom")
+				if atom == 'TO' or atom == 'TD':
+					print("New Menv")
+					return bf, rhpy
 
 	except:
 		print("New Menv Failed")
@@ -45,7 +50,7 @@ def get_bf_rhpy(pdb, res, chain):
 		print("Try Running Renumber")
 		renumber_script = os.path.join(PROJECT_PATH, 'menv_server', 'newrenumber.sh')
 		psf_file = PROJECT_PATH + 'PDB_Data/' + pdb + '-psf.menv'
-		cmd = 'csh ' + renumber_script + ' ' + pdbfile + ' ' + num_file 
+		cmd = 'sh ' + renumber_script + ' ' + pdbfile + ' ' + psf_file
 		print(cmd)
 		os.system(cmd)
 		result_file = os.path.join(PROJECT_PATH, 'PDB_Data', pdb + '-new.menv')
@@ -53,19 +58,24 @@ def get_bf_rhpy(pdb, res, chain):
 		for x in f:
 			x = x.split(',')
 			residue_num = x[1].split(' ')
+			# print(residue_num)
 			residue = int(residue_num[len(residue_num)-3])
+			aa = ''
 			atom = x[3]
-			ch = residue_num[len(residue_num)-6]
+			atom = atom.replace(' ', '')
+			ch = residue_num[5]
 			bf = float(x[4])
 			rhpy = float(x[7])
+			# print(residue, ch, atom, " ", res, chain)
 
-			if (residue == res) and (ch == chain) and ((atom == 'TO') or (atom == 'TD')):
-				print("New Menv")
+			if (residue == res) and (ch == chain.replace('\n', '')) and ((atom == 'TO') or (atom == 'TD')):
+				print("Renumbered New Menv")
 				return bf, rhpy
 	except:
 		print("Renumber failed")
 
 	try:
+		print("Basic psf because new menv renumber also failed")
 		result_file = os.path.join(PROJECT_PATH, 'PDB_Data', pdb + '-psf.menv')
 		f = open(result_file, "r")
 		for x in f:
