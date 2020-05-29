@@ -22,8 +22,9 @@ g.write("PDB, Residue Number, Chain Letter, Cysteine Modification \n\n")
 for i in range(len(pdb)):
 	classes, prediction, pred_max = predict_class(pdb[i], res[i], chain[i])
 	val = str(classes[pred_max])
+	pred_acc = prediction[pred_max]
 	ch = chain[i].replace("\n", "")
-	g.write(pdb[i] + ", " + str(res[i]) + ", " + ch + ": " + val)
+	g.write(pdb[i] + ", " + str(res[i]) + ", " + ch + ": " + val + " , Prediction Accuracy: " + str(pred_acc))
 	g.write("\n")
 
 g.close()
