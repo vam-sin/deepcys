@@ -10,6 +10,7 @@ pip3 install -r requirements.txt
 sudo apt-get install dssp
 sudo apt-get install -y ncbi-entrez-direct
 sudo apt-get install -y libgfortran5
+sudo apt-get install csh
 ```
 
 # Download Data
