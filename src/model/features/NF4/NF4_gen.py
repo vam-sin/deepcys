@@ -10,13 +10,11 @@ from Bio.PDB.DSSP import DSSP
 from Bio import SeqIO
 from Bio.PDB.DSSP import dssp_dict_from_pdb_file
 import pickle
-import matplotlib.pyplot as plt
-import matplotlib
 from sklearn.preprocessing import StandardScaler, LabelEncoder
 
 # Tasks
 # Separate window sizes (3, 5, 7, 9, 11, 13)
-window = 13
+window = 3
 
 # dataset import and preprocessing
 ds = pd.read_excel('../../data/dataset.xlsx')

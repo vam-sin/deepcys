@@ -10,8 +10,6 @@ from Bio.PDB.DSSP import DSSP
 from Bio import SeqIO
 from Bio.PDB.DSSP import dssp_dict_from_pdb_file
 import pickle
-import matplotlib.pyplot as plt
-import matplotlib
 from sklearn.preprocessing import StandardScaler, LabelEncoder
 
 # Tasks

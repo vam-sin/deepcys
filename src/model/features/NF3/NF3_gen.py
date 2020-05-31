@@ -35,7 +35,7 @@ le = LabelEncoder()
 func = le.fit_transform(func)
 print(le.classes_, len(le.classes_))
 
-filename = 'new_thio/NF3.pickle'
+filename = 'feature/NF3.pickle'
 outfile = open(filename,'wb')
 pickle.dump(func ,outfile)
 outfile.close()

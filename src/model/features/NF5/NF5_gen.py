@@ -10,8 +10,6 @@ from Bio.PDB.DSSP import DSSP
 from Bio import SeqIO
 from Bio.PDB.DSSP import dssp_dict_from_pdb_file
 import pickle
-import matplotlib.pyplot as plt
-import matplotlib
 from sklearn.preprocessing import StandardScaler, LabelEncoder
 
 # Tasks
@@ -49,7 +47,7 @@ for i in range(len(pdb)):
 	seq = record[list_ind].seq
 	start = res[i] - window
 	end = res[i] + window
-	
+	# print(seq[res[i]-1])
 	for j in range(start-1, end):
 		try:
 			if seq[j] == 'A':
@@ -60,51 +58,50 @@ for i in range(len(pdb)):
 				string.append(3)
 			elif seq[j] == 'D':
 				string.append(4)
-			elif seq[j] == 'B':
-				string.append(5)
 			elif seq[j] == 'C':
-				string.append(6)
-			elif seq[j] == 'E':
-				string.append(7)
-			elif seq[j] == 'Q':
-				string.append(8)
-			elif seq[j] == 'Z':
-				string.append(9)
+				string.append(5)
 			elif seq[j] == 'G':
-				string.append(10)
+				string.append(6)
+			elif seq[j] == 'Q':
+				string.append(7)
+			elif seq[j] == 'E':
+				string.append(8)
 			elif seq[j] == 'H':
-				string.append(11)
+				string.append(9)
 			elif seq[j] == 'I':
-				string.append(12)
+				string.append(10)
 			elif seq[j] == 'L':
-				string.append(13)
+				string.append(11)
 			elif seq[j] == 'K':
-				string.append(14)
+				string.append(12)
 			elif seq[j] == 'M':
-				string.append(15)
+				string.append(13)
 			elif seq[j] == 'F':
-				string.append(16)
+				string.append(14)
 			elif seq[j] == 'P':
-				string.append(17)
+				string.append(15)
 			elif seq[j] == 'S':
-				string.append(18)
+				string.append(16)
 			elif seq[j] == 'T':
-				string.append(19)
+				string.append(17)
 			elif seq[j] == 'W':
+				string.append(18)
+			elif seq[j] == 'Y':
+				string.append(19)
+			elif seq[j] == 'V':
 				string.append(20)
-			elif seq[j] == 'I':
-				string.append(21)
-			elif seq[j] == 'P':
-				string.append(22)
-			else:
-				string.append(23)
 		except:
-			string.append(24)
+			string.append(21)
 	print(string)
 	prim.append(string)
+
+prim = pd.DataFrame(prim)
+prim = prim.replace(np.nan,0)
+print(prim.isnull().sum().sum())
 
 filename = 'feature/NF5_' + str(window) + '.pickle'
 outfile = open(filename,'wb')
 pickle.dump(prim,outfile)
 outfile.close()
+
 

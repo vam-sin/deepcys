@@ -13,7 +13,7 @@ from sklearn.model_selection import train_test_split, KFold, cross_val_score, St
 from sklearn.preprocessing import StandardScaler, LabelEncoder, normalize
 from sklearn.utils import shuffle
 from sklearn.metrics import confusion_matrix, accuracy_score
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 import pickle
 
 # Tasks
@@ -200,19 +200,19 @@ eval = model.evaluate(x = X, y = y)
 print("Loss: " + str(eval[0]) + ", Accuracy: " + str(eval[1]))
 
 # # Plot History
-# # summarize history for accuracy
-plt.plot(history.history['accuracy'])
-plt.plot(history.history['val_accuracy'])
-plt.title('model accuracy')
-plt.ylabel('accuracy')
-plt.xlabel('epoch')
-plt.legend(['train', 'test'], loc='upper left')
-plt.show()
-# summarize history for loss
-plt.plot(history.history['loss'])
-plt.plot(history.history['val_loss'])
-plt.title('model loss')
-plt.ylabel('loss')
-plt.xlabel('epoch')
-plt.legend(['train', 'test'], loc='upper left')
-plt.show()
+# # # summarize history for accuracy
+# plt.plot(history.history['accuracy'])
+# plt.plot(history.history['val_accuracy'])
+# plt.title('model accuracy')
+# plt.ylabel('accuracy')
+# plt.xlabel('epoch')
+# plt.legend(['train', 'test'], loc='upper left')
+# plt.show()
+# # summarize history for loss
+# plt.plot(history.history['loss'])
+# plt.plot(history.history['val_loss'])
+# plt.title('model loss')
+# plt.ylabel('loss')
+# plt.xlabel('epoch')
+# plt.legend(['train', 'test'], loc='upper left')
+# plt.show()

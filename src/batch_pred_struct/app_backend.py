@@ -105,6 +105,7 @@ def predict_class(pdb, res, chain):
 	for i in nf5_13:
 		X.append(i)
 
+	# print(len(nf1_13), len(nf2_8), len(nf2_7), len(nf2_6), len(nf2_5), len(nf3), len(nf4_13), len(nf4_11), len(nf4_9), len(nf4_7), len(nf4_5), len(nf4_3), len(nf5_13), len(X))
 	X = np.asarray(X)
 	X = np.reshape(X, (len(X),))
 	X = np.array([X,])
