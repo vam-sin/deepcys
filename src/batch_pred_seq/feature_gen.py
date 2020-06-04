@@ -342,47 +342,41 @@ def get_nf5(pdb, res, chain, nf5_window):
 				nf5.append(3)
 			elif seq[j] == 'D':
 				nf5.append(4)
-			elif seq[j] == 'B':
-				nf5.append(5)
 			elif seq[j] == 'C':
-				nf5.append(6)
-			elif seq[j] == 'E':
-				nf5.append(7)
-			elif seq[j] == 'Q':
-				nf5.append(8)
-			elif seq[j] == 'Z':
-				nf5.append(9)
+				nf5.append(5)
 			elif seq[j] == 'G':
-				nf5.append(10)
+				nf5.append(6)
+			elif seq[j] == 'Q':
+				nf5.append(7)
+			elif seq[j] == 'E':
+				nf5.append(8)
 			elif seq[j] == 'H':
-				nf5.append(11)
+				nf5.append(9)
 			elif seq[j] == 'I':
-				nf5.append(12)
+				nf5.append(10)
 			elif seq[j] == 'L':
-				nf5.append(13)
+				nf5.append(11)
 			elif seq[j] == 'K':
-				nf5.append(14)
+				nf5.append(12)
 			elif seq[j] == 'M':
-				nf5.append(15)
+				nf5.append(13)
 			elif seq[j] == 'F':
-				nf5.append(16)
+				nf5.append(14)
 			elif seq[j] == 'P':
-				nf5.append(17)
+				nf5.append(15)
 			elif seq[j] == 'S':
-				nf5.append(18)
+				nf5.append(16)
 			elif seq[j] == 'T':
-				nf5.append(19)
+				nf5.append(17)
 			elif seq[j] == 'W':
+				nf5.append(18)
+			elif seq[j] == 'Y':
+				nf5.append(19)
+			elif seq[j] == 'V':
 				nf5.append(20)
-			elif seq[j] == 'I':
-				nf5.append(21)
-			elif seq[j] == 'P':
-				nf5.append(22)
-			else:
-				nf5.append(23)
 		except:
-			nf5.append(24)
-
+			nf5.append(21)
+			
 	print(nf5)
 
 	return nf5

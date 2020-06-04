@@ -1,6 +1,169 @@
 import os
 import random
 
+def remove_files(pdb):
+	try:
+		cmd = 'rm combined.txt'
+		os.system(cmd)
+	except:
+		pass
+	try:
+		cmd = 'rm commaremoved.menv'
+		os.system(cmd)
+	except:
+		pass
+	try:
+		cmd = 'rm Crdresults.txt'
+		os.system(cmd)
+	except:
+		pass
+	try:
+		cmd = 'rm finalresult.txt'
+		os.system(cmd)
+	except:
+		pass
+	try:
+		cmd = 'rm finalappended.menv'
+		os.system(cmd)
+	except:
+		pass
+	try:
+		cmd = 'rm finalcut.menv'
+		os.system(cmd)
+	except:
+		pass
+	try:
+		cmd = 'rm finalfinal.txt'
+		os.system(cmd)
+	except:
+		pass
+	try:
+		cmd = 'rm finalresultwithnum.txt'
+		os.system(cmd)
+	except:
+		pass
+	try:
+		cmd = 'rm fort.71'
+		os.system(cmd)
+	except:
+		pass
+	try:
+		cmd = 'rm fort.72'
+		os.system(cmd)
+	except:
+		pass
+	try:
+		cmd = 'rm fort.88'
+		os.system(cmd)
+	except:
+		pass
+	try:
+		cmd = 'rm menvfilewithnum.txt'
+		os.system(cmd)
+	except:
+		pass
+	try:
+		cmd = 'rm Menvresults.txt'
+		os.system(cmd)
+	except:
+		pass
+	try:
+		cmd = 'rm outfile.txt'
+		os.system(cmd)
+	except:
+		pass
+	try:
+		cmd = 'rm output.txt'
+		os.system(cmd)
+	except:
+		pass
+	try:
+		cmd = 'rm pythonresults.txt'
+		os.system(cmd)
+	except:
+		pass
+	try:
+		cmd = 'rm requiredoutput.txt'
+		os.system(cmd)
+	except:
+		pass
+	try:
+		cmd = 'rm revisedoutput.txt'
+		os.system(cmd)
+	except:
+		pass
+	try:
+		cmd = 'rm totalresidues.txt'
+		os.system(cmd)
+	except:
+		pass
+	try:
+		cmd = 'rm uniqueMenvresidues.txt'
+		os.system(cmd)
+	except:
+		pass
+	try:
+		cmd = 'rm uniqueresidues.txt'
+		os.system(cmd)
+	except:
+		pass
+	try:
+		cmd = 'rm temp'
+		os.system(cmd)
+	except:
+		pass
+	try:
+		cmd = 'rm PDB_Data/' + str(pdb).upper() + '-new.menv'
+		os.system(cmd)
+	except:
+		pass
+	try:
+		cmd = 'rm PDB_Data/' + str(pdb).lower() + '-new.menv'
+		os.system(cmd)
+	except:
+		pass
+	try:
+		cmd = 'rm PDB_Data/' + str(pdb).upper() + '-psf.crd'
+		os.system(cmd)
+	except:
+		pass
+	try:
+		cmd = 'rm PDB_Data/' + str(pdb).lower() + '-psf.crd'
+		os.system(cmd)
+	except:
+		pass
+	try:
+		cmd = 'rm PDB_Data/' + str(pdb).upper() + '-psf.menv'
+		os.system(cmd)
+	except:
+		pass
+	try:
+		cmd = 'rm PDB_Data/' + str(pdb).lower() + '-psf.menv'
+		os.system(cmd)
+	except:
+		pass
+	try:
+		cmd = 'rm PDB_Data/' + str(pdb).upper() + '-psf.out'
+		os.system(cmd)
+	except:
+		pass
+	try:
+		cmd = 'rm PDB_Data/' + str(pdb).lower() + '-psf.out'
+		os.system(cmd)
+	except:
+		pass
+	try:
+		cmd = 'rm PDB_Data/' + str(pdb).upper() + '-psf.psf'
+		os.system(cmd)
+	except:
+		pass
+	try:
+		cmd = 'rm PDB_Data/' + str(pdb).lower() + '-psf.psf'
+		os.system(cmd)
+	except:
+		pass
+
+
 def get_bf_rhpy(pdb, res, chain):
 	print(res, chain)
 	PROJECT_PATH = os.path.dirname(__file__) + "/"
@@ -41,6 +204,8 @@ def get_bf_rhpy(pdb, res, chain):
 				print("Half Match, Check Atom")
 				if atom == 'TO' or atom == 'TD':
 					print("New Menv")
+					f.close()
+					remove_files(pdb)
 					return bf, rhpy
 
 	except:
@@ -70,6 +235,7 @@ def get_bf_rhpy(pdb, res, chain):
 
 			if (residue == res) and (ch == chain.replace('\n', '')) and ((atom == 'TO') or (atom == 'TD')):
 				print("Renumbered New Menv")
+				remove_files(pdb)
 				return bf, rhpy
 	except:
 		print("Renumber failed")
@@ -87,10 +253,13 @@ def get_bf_rhpy(pdb, res, chain):
 			rhpy = float(x[8])
 			if (aa == '  CYS') and ((atom == '  TO') or (atom == '  TD')):
 				print("PSF Menv")
+				remove_files(pdb)
 				return bf, rhpy
 	except:
 		print("No files, Sending random")
+		remove_files(pdb)
 		return random.uniform(0, 1), random.uniform(0, 1)
 
 	print("send random")
+	remove_files(pdb)
 	return random.uniform(0, 1), random.uniform(0, 1)

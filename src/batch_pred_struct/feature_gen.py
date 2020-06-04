@@ -235,31 +235,34 @@ def get_nf2(pdb, res, chain):
 	return nf2_8_single, nf2_7_single, nf2_6_single, nf2_5_single
 
 def get_nf3(pdb):
+	try:
+		PROJECT_PATH = os.path.dirname(__file__) + "/"
+		path_ = PROJECT_PATH + '/PDB_Data/' + pdb + '.pdb'
+		infile_path = PROJECT_PATH + '/NF3.pickle'
+		infile = open(infile_path,'rb')
+		func = pickle.load(infile)
+		infile.close()
 
-	PROJECT_PATH = os.path.dirname(__file__) + "/"
-	path_ = PROJECT_PATH + '/PDB_Data/' + pdb + '.pdb'
-	infile_path = PROJECT_PATH + '/NF3.pickle'
-	infile = open(infile_path,'rb')
-	func = pickle.load(infile)
-	infile.close()
+		le = LabelEncoder()
+		func = le.fit(func)
+		f = open(path_, "r")
 
-	le = LabelEncoder()
-	func = le.fit(func)
-	f = open(path_, "r")
+		for x in f:
+			x = x.replace("HEADER    ", "")
+			x = x.split(' ')
+			ind_func = ''
+			for j in range(5):
+				ind_func += x[j]
+				# ind_func += ' '
+			print(ind_func)
+			nf3 = le.transform([ind_func])
 
-	for x in f:
-		x = x.replace("HEADER    ", "")
-		x = x.split(' ')
-		ind_func = ''
-		for j in range(5):
-			ind_func += x[j]
-			# ind_func += ' '
-		print(ind_func)
-		nf3 = le.transform([ind_func])
+			break
+		
+		return nf3 
 
-		break
-	
-	return nf3 
+	except:
+		return [999]
 
 def get_nf4(pdb, res, chain, window):
 	sing_motif = np.zeros(8)
@@ -359,6 +362,11 @@ def get_nf5(pdb, res, chain, nf5_window):
 			elif seq[j] == 'V':
 				nf5.append(20)
 		except:
+			nf5.append(21)
+
+	if len(nf5) != nf5_window*2 + 1:
+		left = (nf5_window*2 + 1) - len(nf5)
+		for k in range(left):
 			nf5.append(21)
 
 	print(nf5)

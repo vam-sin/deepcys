@@ -17,7 +17,7 @@ from sklearn.preprocessing import StandardScaler, LabelEncoder
 window = 13
 
 # dataset import and preprocessing
-ds = pd.read_excel('../../data/dataset.xlsx')
+ds = pd.read_excel('../../data/balanced_dataset.xlsx')
 pdb = ds.iloc[:,1]
 # print(pdb)
 res = ds.iloc[:,2]

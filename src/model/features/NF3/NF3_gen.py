@@ -3,7 +3,7 @@ import pandas as pd
 import pickle
 from sklearn.preprocessing import LabelEncoder
 
-ds = pd.read_excel('../../data/dataset.xlsx')
+ds = pd.read_excel('../../data/balanced_dataset.xlsx')
 pdb = ds.iloc[:,1].values
 
 func = []

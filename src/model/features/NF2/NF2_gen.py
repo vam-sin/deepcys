@@ -12,7 +12,7 @@ parser = PDBParser()
 radius = 6
 
 # read structure from file
-ds = pd.read_excel('../../data/dataset.xlsx')
+ds = pd.read_excel('../../data/balanced_dataset.xlsx')
 pdb = ds.iloc[:,1].tolist()
 resid = ds['resid'].tolist()
 chain_ = ds['chain'].tolist()

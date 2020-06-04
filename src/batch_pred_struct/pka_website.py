@@ -32,12 +32,53 @@ def get_pka(pdb, residid, chain):
 				values_req_text.append(j)
 		print(float(values_req_text[3]))
 		pka_val = float(values_req_text[3])
-		cmd = 'rm ' + str(pdb).lower() + '.pka'
-		os.system(cmd)
-		cmd = 'rm ' + str(pdb).lower() + '.propka_input'
-		os.system(cmd)
+		pka_val_file.close()
+		try:
+			cmd = 'rm ' + str(pdb).lower() + '.pka'
+			print(cmd)
+			os.system(cmd)
+		except:
+			pass
+		try:
+			cmd = 'rm ' + str(pdb).upper() + '.pka'
+			print(cmd)
+			os.system(cmd)
+		except:
+			pass
+		try:
+			cmd = 'rm ' + str(pdb).lower() + '.propka_input'
+			os.system(cmd)
+		except:
+			pass
+		try:
+			cmd = 'rm ' + str(pdb).upper() + '.propka_input'
+			os.system(cmd)
+		except:
+			pass
 	except:
 		print("Propka Error!")
+		try:
+			cmd = 'rm ' + str(pdb).lower() + '.pka'
+			print(cmd)
+			os.system(cmd)
+		except:
+			pass
+		try:
+			cmd = 'rm ' + str(pdb).upper() + '.pka'
+			print(cmd)
+			os.system(cmd)
+		except:
+			pass
+		try:
+			cmd = 'rm ' + str(pdb).lower() + '.propka_input'
+			os.system(cmd)
+		except:
+			pass
+		try:
+			cmd = 'rm ' + str(pdb).upper() + '.propka_input'
+			os.system(cmd)
+		except:
+			pass
 		pka_val = 0.0
 
 	return pka_val
