@@ -1,5 +1,5 @@
 # Motifs
-
+# Takes Sequence from the PDB Structure now.
 # Libraries
 import pandas as pd
 import numpy as np
@@ -11,6 +11,7 @@ from Bio import SeqIO
 from Bio.PDB.DSSP import dssp_dict_from_pdb_file
 import pickle
 from sklearn.preprocessing import StandardScaler, LabelEncoder
+from seq_extract import get_sequence
 
 # Tasks
 # Separate window sizes (3, 5, 7, 9, 11, 13)
@@ -32,28 +33,12 @@ for i in range(len(pdb)):
 	print(pdb_id, i)
 	list_ind = 0
 	try:
-		file = '../../../../fasta/' + pdb_id.upper() +'.fasta.txt'
+		file = '../../../../pdb/' + pdb_id.upper() +'.pdb'
+		string = get_sequence(file, res[i], chain[i], window)
 	except:
-		file = '../../../../fasta/' + pdb_id.lower() +'.fasta.txt'
-
-	record = list(SeqIO.parse(file, "fasta"))
-	for j in range(len(record)):
-		if type(chain[i]) == str:	
-			ind = record[j].id[5]
-			if ind == chain[i]:
-				list_ind = j
-				break
-		else:
-			list_ind = chain[i] - 1
-
-	seq = record[list_ind].seq
-	start = res[i] - window
-	end = res[i] + window
-	for j in range(start-1, end):
-		try:
-			string += seq[j]
-		except:
-			string += '-'
+		file = '../../../../pdb/' + pdb_id.lower() +'.pdb'
+		string = get_sequence(file, res[i], chain[i], window)
+	print(string)
 	
 	# # Motif check: CC, CXC, CX4C, CX3C, CX2C, CX2CX5C, CX2CX2C, CX2CX2CX3C
 	if len(re.findall(r"CC", string)) > 0:

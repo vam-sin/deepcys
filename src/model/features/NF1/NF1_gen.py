@@ -14,7 +14,7 @@ from sklearn.preprocessing import StandardScaler, LabelEncoder
 
 # Tasks
 # Separate window sizes (3, 5, 7, 9, 11, 13)
-window = 13
+window = 5
 
 # dataset import and preprocessing
 ds = pd.read_excel('../../data/balanced_dataset.xlsx')
