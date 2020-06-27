@@ -17,6 +17,8 @@ from sklearn.metrics import confusion_matrix, accuracy_score, f1_score
 import matplotlib.pyplot as plt
 import pickle
 from keras import regularizers
+from keras import backend as K
+from sklearn.utils import class_weight
 
 # GPU
 from tensorflow.compat.v1 import ConfigProto
@@ -46,10 +48,27 @@ if gpus:
         print(e)
 
 # Tasks
+def recall_m(y_true, y_pred):
+    true_positives = K.sum(K.round(K.clip(y_true * y_pred, 0, 1)))
+    possible_positives = K.sum(K.round(K.clip(y_true, 0, 1)))
+    recall = true_positives / (possible_positives + K.epsilon())
+    return recall
+
+def precision_m(y_true, y_pred):
+    true_positives = K.sum(K.round(K.clip(y_true * y_pred, 0, 1)))
+    predicted_positives = K.sum(K.round(K.clip(y_pred, 0, 1)))
+    precision = true_positives / (predicted_positives + K.epsilon())
+    return precision
+
+def f1_m(y_true, y_pred):
+    precision = precision_m(y_true, y_pred)
+    recall = recall_m(y_true, y_pred)
+    return 2*((precision*recall)/(precision+recall+K.epsilon()))
 
 # dataset import and preprocessing
-ds = pd.read_excel("../data/balanced_dataset.xlsx")
+ds = pd.read_csv("../data/correct_data/dataset.csv")
 X1 = ds.iloc[:,4:6] # ('pKa', 'BF')
+# print(X1)
 # X1 = normalize(X1, norm = 'l2')
 X1 = pd.DataFrame(X1)
 X2 = ds.iloc[:,6:7] # rHpy
@@ -57,6 +76,7 @@ X = pd.concat([X1, X2], axis=1)
 # print(X)
 # X = X.fillna(X.mean())
 y = ds.iloc[:,7]
+y_w = y
 # print(X, y)
 # Seed
 seed = 1337
@@ -98,7 +118,7 @@ nf2_5 = pickle.load(infile)
 infile.close()
 
 # # # Protein Class features (NF3)
-infile = open('../features/NF3/feature/NF3.pickle','rb')
+infile = open('../features/NF3/feature/NF3_le.pickle','rb')
 nf3 = pickle.load(infile)
 infile.close()
 
@@ -160,14 +180,60 @@ encoder.fit(y)
 encoded_Y = encoder.transform(y)
 y = np_utils.to_categorical(encoded_Y)
 print("The classes in y are: " + str(encoder.classes_))
+
+# Make Test Data
+metal_X = X.iloc[18759:18859,:]
+X = X.drop(X.index[18759:18859])
+y_ = pd.DataFrame(y)
+metal_y = y_.iloc[18759:18859]
+y_ = y_.drop(y_.index[18759:18859])
+y_w = y_w.drop(y_w.index[18759:18859])
+# print(metal_y)
+
+sulph_X = X.iloc[18961:19061,:]
+sulph_y = y_.iloc[18961:19061]
+X = X.drop(X.index[18961:19061])
+y_ = y_.drop(y_.index[18961:19061])
+y_w = y_w.drop(y_w.index[18961:19061])
+# print(sulph_y)
+
+dis_X = X.iloc[55170:55270,:]
+dis_y = y_.iloc[55170:55270]
+X = X.drop(X.index[55170:55270])
+y_ = y_.drop(y_.index[55170:55270])
+y_w = y_w.drop(y_w.index[55170:55270])
+# print(dis_y)
+
+thio_X = X.iloc[107260:107360,:]
+thio_y = y_.iloc[107260:107360]
+X = X.drop(X.index[107260:107360])
+y_ = y_.drop(y_.index[107260:107360])
+y_w = y_w.drop(y_w.index[107260:107360])
+# print(thio_y)
+X_test = pd.concat([metal_X, sulph_X, dis_X, thio_X], axis = 0)
+y_test = np.asarray(pd.concat([metal_y, sulph_y, dis_y, thio_y], axis = 0))
+y_train = np.asarray(y_) 
+X_train = X
+
+y_w = list(y_w.values)
+encoder = LabelEncoder()
+encoder.fit(y_w)
+y_w = encoder.transform(y_w)
+class_weights = class_weight.compute_class_weight('balanced',
+                                                 np.unique(y_w),
+                                                 y_w)
+print(class_weights, np.unique(y_w))
+
+# print(X_test, y_test)
 # print(list(encoder.inverse_transform(encoded_Y)))
 # print(X, y)
-X, y = shuffle(X, y, random_state = 42)
+X_train, y_train = shuffle(X_train, y_train, random_state = 42)
 
-X_train, X_test, y_train, y_test = train_test_split(X.values, y, test_size=0.1, random_state = 42)
+# X_train, X_test, y_train, y_test = train_test_split(X.values, y, test_size=0.1, random_state = 42)
 
 # print(y_test)
 # Conv1D Layers
+y_ = pd.DataFrame(y_)
 X_train = np.expand_dims(X_train,axis=2)
 X_test = np.expand_dims(X_test,axis=2)
 
@@ -177,7 +243,7 @@ input_ = Input(shape = (len(X.columns),1,))
 x = Conv1D(128, (3), padding = 'same', kernel_initializer = 'glorot_uniform', kernel_regularizer=regularizers.l1_l2(l1=1e-5, l2=1e-4), bias_regularizer=regularizers.l2(1e-4), activity_regularizer=regularizers.l2(1e-5))(input_)
 x = LeakyReLU(alpha = 0.05)(x)
 x = Conv1D(64, (3), padding = 'same', kernel_initializer = 'glorot_uniform', kernel_regularizer=regularizers.l1_l2(l1=1e-5, l2=1e-4), bias_regularizer=regularizers.l2(1e-4), activity_regularizer=regularizers.l2(1e-5))(x)
-x = GaussianNoise(0.5)(x)
+# x = GaussianNoise(0.5)(x)
 x = LeakyReLU(alpha = 0.05)(x)
 x = Conv1D(32, (3), padding = 'same', kernel_initializer = 'glorot_uniform', kernel_regularizer=regularizers.l1_l2(l1=1e-5, l2=1e-4), bias_regularizer=regularizers.l2(1e-4), activity_regularizer=regularizers.l2(1e-5))(x)
 x = LeakyReLU(alpha = 0.05)(x)
@@ -195,13 +261,13 @@ x = BatchNormalization()(x)
 # Block 2
 z = Dense(256, kernel_initializer = 'glorot_uniform', kernel_regularizer=regularizers.l1_l2(l1=1e-5, l2=1e-4), bias_regularizer=regularizers.l2(1e-4), activity_regularizer=regularizers.l2(1e-5))(x)
 z = LeakyReLU(alpha = 0.05)(z)
-z = Dropout(0.5)(z)
+z = Dropout(0.7)(z)
 z = BatchNormalization()(z)
 
 # Block 3
 x = Dense(128, kernel_initializer = 'glorot_uniform', kernel_regularizer=regularizers.l1_l2(l1=1e-5, l2=1e-4), bias_regularizer=regularizers.l2(1e-4), activity_regularizer=regularizers.l2(1e-5))(z)
 x = LeakyReLU(alpha = 0.05)(x)
-x = Dropout(0.5)(x)
+x = Dropout(0.7)(x)
 x = BatchNormalization()(x) 
 
 # Block 4
@@ -210,19 +276,19 @@ z = Dense(128, kernel_initializer = 'glorot_uniform', kernel_regularizer=regular
 sk1 = Add()([x, z])
 z = Dense(64, kernel_initializer = 'glorot_uniform', kernel_regularizer=regularizers.l1_l2(l1=1e-5, l2=1e-4), bias_regularizer=regularizers.l2(1e-4), activity_regularizer=regularizers.l2(1e-5))(sk1)
 z = LeakyReLU(alpha = 0.05)(z)
-z = Dropout(0.5)(z)
+z = Dropout(0.7)(z)
 z = BatchNormalization()(z)
 
 # Block 5
 x = Dense(32, kernel_initializer = 'glorot_uniform', kernel_regularizer=regularizers.l1_l2(l1=1e-5, l2=1e-4), bias_regularizer=regularizers.l2(1e-4), activity_regularizer=regularizers.l2(1e-5))(z)
 x = LeakyReLU(alpha = 0.05)(x)
-x = Dropout(0.5)(x)
+x = Dropout(0.7)(x)
 x = BatchNormalization()(x) 
 
 # Block 6
 z = Dense(16, kernel_initializer = 'glorot_uniform', kernel_regularizer=regularizers.l1_l2(l1=1e-5, l2=1e-4), bias_regularizer=regularizers.l2(1e-4), activity_regularizer=regularizers.l2(1e-5))(x)
 z = LeakyReLU(alpha = 0.05)(z)
-z = Dropout(0.5)(z)
+z = Dropout(0.7)(z)
 z = BatchNormalization()(z)
 
 # Block 7
@@ -232,7 +298,7 @@ sk2 = Add()([z, x])
 x = Dense(8, kernel_initializer = 'glorot_uniform', kernel_regularizer=regularizers.l1_l2(l1=1e-5, l2=1e-4), bias_regularizer=regularizers.l2(1e-4), activity_regularizer=regularizers.l2(1e-5))(sk2)
 x = LeakyReLU(alpha = 0.05)(x)
 x = BatchNormalization()(x) 
-x = Dropout(0.5)(x)
+x = Dropout(0.7)(x)
 x = Dense(4, activation = 'softmax', kernel_regularizer=regularizers.l1_l2(l1=1e-5, l2=1e-4), bias_regularizer=regularizers.l2(1e-4), activity_regularizer=regularizers.l2(1e-5))(x)
 
 model = Model(input_, x)
@@ -240,23 +306,26 @@ model.compile(optimizer = 'adam', loss = 'categorical_crossentropy', metrics=['a
 
 # callbacks
 mcp_save = keras.callbacks.callbacks.ModelCheckpoint('ann.h5', save_best_only=True, monitor='val_accuracy', verbose=1)
-reduce_lr = keras.callbacks.callbacks.ReduceLROnPlateau(monitor='val_accuracy', factor=0.1, patience=10, verbose=1, mode='auto', min_delta=0.0001, cooldown=0, min_lr=0)
+reduce_lr = keras.callbacks.callbacks.ReduceLROnPlateau(monitor='val_accuracy', factor=0.1, patience=2, verbose=1, mode='auto', min_delta=0.0001, cooldown=0, min_lr=0)
 callbacks_list = [reduce_lr, mcp_save]
 
 # Training
-history = model.fit(X_train, y_train, batch_size = 32, epochs = 150, validation_data = (X_test, y_test), shuffle = False, callbacks = callbacks_list)
+# weights = [ 0.31614373  1.43080227 46.60362694  8.58253817]
+weights = {0: 0.31614373, 1: 1.43080227, 2: 46.60362694, 3: 8.58253817}
+history = model.fit(X_train, y_train, batch_size = 512, epochs = 20, validation_data = (X_test, y_test), shuffle = False, callbacks = callbacks_list, class_weight = weights)
 
 # Testing
 model = load_model('ann.h5')
-eval = model.evaluate(x = X_test, y = y_test)
-print("Loss: " + str(eval[0]) + ", Accuracy: " + str(eval[1]))
+eval_ = model.evaluate(x = X_test, y = y_test)
+print("Loss: " + str(eval_[0]) + ", Accuracy: " + str(eval_[1]))
+print(eval_)
 
 y_pred = model.predict(X_test)
-count = 0
-for i in range(len(y_pred)):
-    if np.where(y_pred[i] == max(y_pred[i]))[0][0] == np.where(y_test[i] == (max(y_test[i])))[0][0]:
-        count = count + 1
-print("Accuracy: ", count/len(y_pred))
+# count = 0
+# for i in range(len(y_pred)):
+#     if np.where(y_pred[i] == max(y_pred[i]))[0][0] == np.where(y_test[i] == (max(y_test[i])))[0][0]:
+#         count = count + 1
+# print("Accuracy: ", count/len(y_pred))
 
 # Metrics
 print("Confusion Matrix")
@@ -287,11 +356,36 @@ plt.legend(['train', 'test'], loc='upper left')
 plt.show()
 
 ''' 
-[[152   0  58  33]
- [  0 212   2   0]
- [ 63   0 127  25]
- [ 19   0  23 204]]
+######## Tasks ######$$$$
+1. Split into specific train and test. (Done)
+Take 100 of each. 
+2. Convert to weighted crossentropy (Done)
+If you are talking about the regular case, where your network produces only one output, 
+then your assumption is correct. In order to force your algorithm to treat every instance of class 1 as 50 instances of class 0 you have to.
+"treat every instance of class 1 as 50 instances of class 0" means that in your loss function you assign higher value to these instances. 
+Hence, the loss becomes a weighted average, where the weight of each sample is specified by class_weight and its corresponding class. 
+3. Choose a different performance metric to maximize - Done. Fixed Class Imbalance issue.
+Precision, Recall, F1 Score
+Undersampling Majority
+Oversampling Majority
+SMOTE
+####### Results #########
 
-loss: 0.7292 - accuracy: 0.6842 - val_loss: 0.6676 - val_accuracy: 0.7571
-[0,1,2,3]: ['Disulphide' 'Sulphenylation' 'metal-binding' 'thioether']
+loss: 1.6696 - accuracy: 0.8350 - val_loss: 1.2270 - val_accuracy: 0.8625
+Confusion Matrix
+[[100   0   0   0]
+ [  0  86   1  13]
+ [  0   1  99   0]
+ [  0  30  10  60]]
+F1 Score
+0.857281372366213
+
+Grid Search:
+Batch Size: 256
+Epochs: 20
+
+####### Parameters #######
+
+[0,1,2,3]: ['disulphide' 'metal-binding' 'sulphenylation' 'thioether']: (weights) [0.31694402, 1.42852999, 39.88733432, 8.34879778]: (frequency)
+
 '''

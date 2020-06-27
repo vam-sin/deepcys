@@ -14,12 +14,19 @@ from sklearn.preprocessing import StandardScaler, LabelEncoder
 
 # Tasks
 # Separate window sizes (3, 5, 7, 9, 11, 13)
-window = 5
+window = 13
 
 # dataset import and preprocessing
-ds = pd.read_excel('../../data/balanced_dataset.xlsx')
-pdb = ds.iloc[:,1]
-print(pdb)
+ds = pd.read_csv('../../data/correct_data/dataset.csv')
+pdb = list(ds.iloc[:,1].values)
+new_pdb = []
+for i in pdb:
+	i = i.replace('.pdb', '')
+	new_pdb.append(i)
+
+# print(new_pdb)
+pdb = new_pdb
+# print(pdb)
 res = ds.iloc[:,2]
 chain = ds.iloc[:,3]
 
@@ -34,52 +41,57 @@ chain = ds.iloc[:,3]
 
 ssf_list = []
 p = PDBParser()
-last_file = '../../../../pdb/1b2l.pdb'
+last_file = '../../../../pdb/' + str(pdb[0]) + '.pdb'
 last_dssp = dssp_dict_from_pdb_file(last_file)
 for i in range(len(pdb)):
-	pdb_id = str(pdb[i])
-	print(pdb_id)
 	try:
-		file = '../../../../pdb/' + pdb_id.lower() +'.pdb'
-		if file == last_file:
-			dssp = last_dssp
-		else:
-			last_file = file 
-			dssp = dssp_dict_from_pdb_file(file)
-			last_dssp = dssp
-	except:
-		file = '../../../../pdb/' + pdb_id.upper() +'.pdb'
-		if file == last_file:
-			dssp = last_dssp
-		else:
-			last_file = file 
-			dssp = dssp_dict_from_pdb_file(file)
-			last_dssp = dssp
-	dssp = dssp[0]
-	# print(dssp)
-	ssf = []
-	start = res[i] - window
-	end = res[i] + window
-	structure = ''
-	for k, v in dssp:
-		chain = k
-		break
-	for j in range(start-1, end):
+		pdb_id = str(pdb[i])
+		print(pdb_id)
 		try:
-			structure = dssp[chain, (' ', j, ' ')][1]
-			if structure == 'H' or structure == 'G' or structure == 'I':
-				ssf.append(1)
-			elif structure == 'T' or structure == 'S':
-				ssf.append(2)
-			elif structure == 'B':
-				ssf.append(3)
-			elif structure == 'E':
-				ssf.append(4)
+			file = '../../../../pdb/' + pdb_id.lower() +'.pdb'
+			if file == last_file:
+				dssp = last_dssp
 			else:
-				ssf.append(5)
+				last_file = file 
+				dssp = dssp_dict_from_pdb_file(file)
+				last_dssp = dssp
 		except:
-			ssf.append(6)
-	print(ssf, i)
+			file = '../../../../pdb/' + pdb_id.upper() +'.pdb'
+			if file == last_file:
+				dssp = last_dssp
+			else:
+				last_file = file 
+				dssp = dssp_dict_from_pdb_file(file)
+				last_dssp = dssp
+		dssp = dssp[0]
+		# print(dssp)
+		ssf = []
+		start = res[i] - window
+		end = res[i] + window
+		structure = ''
+		for k, v in dssp:
+			chain = k
+			break
+		for j in range(start-1, end):
+			try:
+				structure = dssp[chain, (' ', j, ' ')][1]
+				if structure == 'H' or structure == 'G' or structure == 'I':
+					ssf.append(1)
+				elif structure == 'T' or structure == 'S':
+					ssf.append(2)
+				elif structure == 'B':
+					ssf.append(3)
+				elif structure == 'E':
+					ssf.append(4)
+				else:
+					ssf.append(5)
+			except:
+				ssf.append(6)
+		print(ssf, i, len(pdb))
+	except:
+		print("Error")
+		ssf = np.zeros(window*2 + 1, dtype = int)
+		print(ssf, i, len(pdb))
 	ssf_list.append(ssf)
 
 # # Pickle

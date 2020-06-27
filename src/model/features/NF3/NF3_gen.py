@@ -3,8 +3,15 @@ import pandas as pd
 import pickle
 from sklearn.preprocessing import LabelEncoder
 
-ds = pd.read_excel('../../data/balanced_dataset.xlsx')
-pdb = ds.iloc[:,1].values
+ds = pd.read_csv('../../data/correct_data/dataset.csv')
+pdb = list(ds.iloc[:,1].values)
+new_pdb = []
+for i in pdb:
+	i = i.replace('.pdb', '')
+	new_pdb.append(i)
+
+# print(new_pdb)
+pdb = new_pdb
 
 func = []
 for i in range(len(pdb)):
@@ -35,7 +42,7 @@ le = LabelEncoder()
 func = le.fit_transform(func)
 print(le.classes_, len(le.classes_))
 
-filename = 'feature/NF3.pickle'
+filename = 'feature/NF3_le.pickle'
 outfile = open(filename,'wb')
 pickle.dump(func ,outfile)
 outfile.close()

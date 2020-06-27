@@ -15,11 +15,18 @@ from seq_extract import get_sequence
 
 # Tasks
 # Separate window sizes (3, 5, 7, 9, 11, 13)
-window = 3
+window = 13
 
 # dataset import and preprocessing
-ds = pd.read_excel('../../data/balanced_dataset.xlsx')
-pdb = ds.iloc[:,1]
+ds = pd.read_csv('../../data/correct_data/dataset.csv')
+pdb = list(ds.iloc[:,1].values)
+new_pdb = []
+for i in pdb:
+	i = i.replace('.pdb', '')
+	new_pdb.append(i)
+
+# print(new_pdb)
+pdb = new_pdb
 # print(pdb)
 res = ds.iloc[:,2]
 chain = ds.iloc[:,3]
@@ -30,7 +37,7 @@ for i in range(len(pdb)):
 	sing_motif = np.zeros(8)
 	pdb_id = str(pdb[i])
 	string = ''
-	print(pdb_id, i)
+	print(pdb_id, i, len(pdb))
 	list_ind = 0
 	try:
 		file = '../../../../pdb/' + pdb_id.upper() +'.pdb'
