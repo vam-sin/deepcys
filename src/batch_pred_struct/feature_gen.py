@@ -6,6 +6,7 @@ from Bio.PDB import PDBParser
 from Bio import SeqIO
 import pickle
 from sklearn.preprocessing import LabelEncoder
+from seq_extract import get_sequence
 import re
 
 def get_nf1(pdb, res, chain, nf1_window):
@@ -231,6 +232,10 @@ def get_nf2(pdb, res, chain):
 		print(nf2_8_single)
 	except:
 		print("NF2 Production Failed")
+		print(nf2_5_single)
+		print(nf2_6_single)
+		print(nf2_7_single)
+		print(nf2_8_single)
 
 	return nf2_8_single, nf2_7_single, nf2_6_single, nf2_5_single
 
@@ -259,36 +264,24 @@ def get_nf3(pdb):
 
 			break
 		
+		print("NF3: ", nf3)
+
 		return nf3 
 
 	except:
+		print("NF3: ", 999)
+
 		return [999]
 
 def get_nf4(pdb, res, chain, window):
 	sing_motif = np.zeros(8)
-	string = ''
-	list_ind = 0
-	PROJECT_PATH = os.path.dirname(__file__) + "/"
-	file = PROJECT_PATH + '/PDB_fasta/' + pdb + '.fasta'
-
-	record = list(SeqIO.parse(file, "fasta"))
-	for j in range(len(record)):
-		if type(chain) == str:	
-			ind = record[j].id[5]
-			if ind == chain:
-				list_ind = j
-				break
-		else:
-			list_ind = chain - 1
-
-	seq = record[list_ind].seq
-	start = res - window
-	end = res + window
-	for j in range(start-1, end):
-		try:
-			string += seq[j]
-		except:
-			string += '-'
+	try:
+		file = 'PDB_Data/' + pdb.upper() +'.pdb'
+		string = get_sequence(file, res, chain, window)
+	except:
+		file = 'PDB_Data/' + pdb.lower() +'.pdb'
+		string = get_sequence(file, res, chain, window)
+	print(string)
 	
 	if len(re.findall(r"CC", string)) > 0:
 		sing_motif[0] = 1.0
@@ -310,66 +303,4 @@ def get_nf4(pdb, res, chain, window):
 	print("NF4_" + str(window) + ": " + str(sing_motif))
 	
 	return sing_motif
-
-def get_nf5(pdb, res, chain, nf5_window):
-	PROJECT_PATH = os.path.dirname(__file__) + "/"
-	filename_fasta = PROJECT_PATH + '/PDB_fasta/' + pdb + '.fasta'
-	record = list(SeqIO.parse(filename_fasta, "fasta"))
-	seq = record[0].seq
-	start = res - nf5_window
-	end = res + nf5_window
-	nf5 = []
-	for j in range(start-1, end):
-		try:
-			if seq[j] == 'A':
-				nf5.append(1)
-			elif seq[j] == 'R':
-				nf5.append(2)
-			elif seq[j] == 'N':
-				nf5.append(3)
-			elif seq[j] == 'D':
-				nf5.append(4)
-			elif seq[j] == 'C':
-				nf5.append(5)
-			elif seq[j] == 'G':
-				nf5.append(6)
-			elif seq[j] == 'Q':
-				nf5.append(7)
-			elif seq[j] == 'E':
-				nf5.append(8)
-			elif seq[j] == 'H':
-				nf5.append(9)
-			elif seq[j] == 'I':
-				nf5.append(10)
-			elif seq[j] == 'L':
-				nf5.append(11)
-			elif seq[j] == 'K':
-				nf5.append(12)
-			elif seq[j] == 'M':
-				nf5.append(13)
-			elif seq[j] == 'F':
-				nf5.append(14)
-			elif seq[j] == 'P':
-				nf5.append(15)
-			elif seq[j] == 'S':
-				nf5.append(16)
-			elif seq[j] == 'T':
-				nf5.append(17)
-			elif seq[j] == 'W':
-				nf5.append(18)
-			elif seq[j] == 'Y':
-				nf5.append(19)
-			elif seq[j] == 'V':
-				nf5.append(20)
-		except:
-			nf5.append(21)
-
-	if len(nf5) != nf5_window*2 + 1:
-		left = (nf5_window*2 + 1) - len(nf5)
-		for k in range(left):
-			nf5.append(21)
-
-	print(nf5)
-
-	return nf5
 

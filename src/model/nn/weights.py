@@ -14,6 +14,12 @@ class_weights = class_weight.compute_class_weight('balanced',
                                                  np.unique(y),
                                                  y)
 print(class_weights, np.unique(y))
+y = pd.DataFrame(y)
+print(y)
+
+dis = ds.loc[ds['mod'] == 'sulphenylation']
+print(dis)
+print(dis['pdb'].nunique())
 
 '''
 ['disulphide' 'metal-binding' 'sulphenylation' 'thioether'] : [ 0.31694402  1.42852999 39.88733432  8.34879778]
