@@ -9,11 +9,14 @@ def three_to_one(aa):
 	return d[aa]
 
 def get_sequence(pdb, res, chain, window):
+
 	pdb_file = open(pdb, "r")
 	sequence = ''
 	start = res - window
 	end = res + window
+	print(res)
 	if start <= 0:
+		print("Start error")
 		for i in range(abs(start)+1):
 			sequence += 'Z'
 		start = 1
@@ -27,14 +30,30 @@ def get_sequence(pdb, res, chain, window):
 				if seg != '':
 					new_line.append(seg)
 
-			if new_line[0] == 'ATOM':
+			if new_line[0] == 'ATOM' or new_line[0] == 'HETATM':
 				try:
-					res_num = int(new_line[5])
-					aa = new_line[3]
-					ch = new_line[4]
-					if i == res_num and chain == ch:
-						# print(i)
-						sequence += three_to_one(aa)
+					try:
+						res_num = int(new_line[5])
+						aa = new_line[3]
+						ch = new_line[4]
+					except:
+						pass
+					try:
+						res_num = int(new_line[4].replace(chain, ''))
+						ch = new_line[4][0]
+						aa = new_line[3]
+					except:
+						pass
+					# if int(i) == 39:
+					# 	print(res_num, aa, ch)
+					if int(i) == res_num and chain == ch:
+						print(res_num, ch, aa)
+						try:
+							sequence += three_to_one(aa)
+						except:
+							print(aa, "CSO TYPE")
+							if 'CSO' in aa:
+								sequence += 'C'
 						break 
 				except:
 					pass
@@ -43,15 +62,22 @@ def get_sequence(pdb, res, chain, window):
 					# 	pass
 		# except:
 		# 	sequence.append('X')
+
 	total_len = window*2 + 1
 	if len(sequence) < total_len:
+		print("End Error")
 		left = total_len - len(sequence)
 		for j in range(left):
+			# print("Z")
 			sequence += 'Z'
 
 	return sequence
 
 if __name__ == '__main__':
 	window = 13
-	sequence = get_sequence('1b2l.pdb', 137, 'A', window)
+	sequence = get_sequence('5vm2.pdb', 39, 'B', window)
 	print(sequence, len(sequence), sequence[window])
+	if sequence[window] == 'C':
+		print(sequence[window], "Yes")
+	else:
+		print(sequence[window], "No")

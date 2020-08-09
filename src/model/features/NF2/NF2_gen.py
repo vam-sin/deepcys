@@ -12,19 +12,16 @@ parser = PDBParser()
 radius = 6
 
 # read structure from file
-ds = pd.read_csv('../../data/correct_data/dataset.csv')
+ds = pd.read_csv('../../dataset/dataset.csv')
 pdb = list(ds.iloc[:,1].values)
 new_pdb = []
 for i in pdb:
 	i = i.replace('.pdb', '')
 	new_pdb.append(i)
 
-# print(new_pdb)
 pdb = new_pdb
-# print(pdb)
-resid = ds['res'].tolist()
-chain_ = ds['chain'].tolist()
-print(len(pdb))
+res = ds.iloc[:,2]
+chain = ds.iloc[:,3]
 
 # Iterate for the protein
 inshell_proteins_5 = []
@@ -37,7 +34,6 @@ for i in range(len(pdb)):
 	inshell_proteins_single_6 = np.zeros(20, dtype = int) 
 	inshell_proteins_single_7 = np.zeros(20, dtype = int) 
 	inshell_proteins_single_8 = np.zeros(20, dtype = int) 
-	# print(pdb[i])
 	try:
 		try:
 			path_ = '../../../../pdb/' + str(pdb[i]).lower() + '.pdb'
@@ -46,11 +42,7 @@ for i in range(len(pdb)):
 			path_ = '../../../../pdb/' + str(pdb[i]).upper() + '.pdb'
 			structure = parser.get_structure('PHA-L', path_)
 		model = structure[0]
-		# print(model)
 		try:
-			# for x in model:
-			# 	print(x)
-			# Iterate for all chains
 			for chain in model:
 				residue1 = chain[resid[i]] 
 				for residue2 in chain:
@@ -224,10 +216,10 @@ for i in range(len(pdb)):
 							elif residue2.get_resname() == 'VAL':
 								inshell_proteins_single_8[19] += 1
 								
-			# print(inshell_proteins_single_5)
-			# print(inshell_proteins_single_6)
-			# print(inshell_proteins_single_7)
-			# print(inshell_proteins_single_8)
+			print(inshell_proteins_single_5)
+			print(inshell_proteins_single_6)
+			print(inshell_proteins_single_7)
+			print(inshell_proteins_single_8)
 		except:
 			print("Error")
 	except:
@@ -238,22 +230,22 @@ for i in range(len(pdb)):
 	inshell_proteins_7.append(inshell_proteins_single_7)
 	inshell_proteins_8.append(inshell_proteins_single_8)
 
-filename = 'feature/NF2_5.pickle'
+filename = 'NF2_5.pickle'
 outfile = open(filename,'wb')
 pickle.dump(inshell_proteins_5 ,outfile)
 outfile.close()
 
-filename = 'feature/NF2_6.pickle'
+filename = 'NF2_6.pickle'
 outfile = open(filename,'wb')
 pickle.dump(inshell_proteins_6 ,outfile)
 outfile.close()
 
-filename = 'feature/NF2_7.pickle'
+filename = 'NF2_7.pickle'
 outfile = open(filename,'wb')
 pickle.dump(inshell_proteins_7 ,outfile)
 outfile.close()
 
-filename = 'feature/NF2_8.pickle'
+filename = 'NF2_8.pickle'
 outfile = open(filename,'wb')
 pickle.dump(inshell_proteins_8 ,outfile)
 outfile.close()

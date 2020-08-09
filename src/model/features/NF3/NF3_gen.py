@@ -3,15 +3,17 @@ import pandas as pd
 import pickle
 from sklearn.preprocessing import LabelEncoder
 
-ds = pd.read_csv('../../data/correct_data/dataset.csv')
+# dataset import and processing
+ds = pd.read_csv('../../dataset/dataset.csv')
 pdb = list(ds.iloc[:,1].values)
 new_pdb = []
 for i in pdb:
 	i = i.replace('.pdb', '')
 	new_pdb.append(i)
 
-# print(new_pdb)
 pdb = new_pdb
+res = ds.iloc[:,2]
+chain = ds.iloc[:,3]
 
 func = []
 for i in range(len(pdb)):
@@ -28,7 +30,6 @@ for i in range(len(pdb)):
 		ind_func = ''
 		for j in range(5):
 			ind_func += x[j]
-			# ind_func += ' '
 		print(ind_func)
 		func.append(ind_func)
 		break

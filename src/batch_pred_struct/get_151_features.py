@@ -22,33 +22,32 @@ def get_features(pdb, res, chain):
 	if os.path.isfile(filename_pdb) == False:
 		url = 'https://files.rcsb.org/download/' + pdb.upper() + '.pdb'
 		r = requests.get(url)
-		open(filename_pdb, 'wb').write(r.content)
-		print("Obtained PDB.")
+		f = open(filename_pdb, 'wb')
+		f.write(r.content)
+		f.close()
+		print("Obtained PDB. ", res)
 
-	# # pKa 
-	pKa = get_pka(pdb, res, chain)
-	print("pKa Calculation Done: " + str(pKa))
-
-	# # BF_RHPY
+	# BF_rHpy
 	BF, rHpy = get_bf_rhpy(pdb, res, chain)
 	print("Calculated BF and rHpy: " + str(BF) + ", " + str(rHpy))
 
-	# # NF1
-	nf1_9 = get_nf1(pdb, res, chain, 9)
+
+	# Secondary Structure Folds
+	nf1_7 = get_nf1(pdb, res, chain, 7)
 
 	print("Calculated NF1.")
 
-	# # NF2
+	# Amino Acid Signatures in Interaction Shells
 	nf2_8, nf2_7, nf2_6, nf2_5 = get_nf2(pdb, res, chain)
 
 	print("Calculated NF2.")
 
-	# # NF3
+	# Enzyme Class
 	nf3 = get_nf3(pdb)
 	print(nf3)
 	print("Calculated NF3")
 	
-	# # NF4
+	# Motifs
 	nf4_3 = get_nf4(pdb, res, chain, 3)
 	nf4_5 = get_nf4(pdb, res, chain, 5)
 	nf4_7 = get_nf4(pdb, res, chain, 7)
@@ -60,11 +59,10 @@ def get_features(pdb, res, chain):
 
 	# # Compile X
 	X = []
-	X.append(pKa)
 	X.append(BF)
 	X.append(rHpy)
 
-	for i in nf1_9:
+	for i in nf1_7:
 		X.append(i)
 
 	for i in nf2_5:
@@ -93,7 +91,6 @@ def get_features(pdb, res, chain):
 		X.append(i)
 
 
-	# print(len(nf1_13), len(nf2_8), len(nf2_7), len(nf2_6), len(nf2_5), len(nf3), len(nf4_13), len(nf4_11), len(nf4_9), len(nf4_7), len(nf4_5), len(nf4_3), len(nf5_13), len(X))
 	X = np.asarray(X)
 	print(X.shape)
 

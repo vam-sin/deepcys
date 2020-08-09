@@ -1,0 +1,3 @@
+##### DeepCys Batch Prediction Results #####
+
+metal-binding

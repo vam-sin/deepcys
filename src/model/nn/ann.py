@@ -48,20 +48,22 @@ if gpus:
         print(e)
 
 # dataset import and preprocessing
-ds = pd.read_csv("../data/correct_data/dataset.csv")
-X1 = ds.iloc[:,4:6] # ('pKa', 'BF')
+ds = pd.read_csv("../dataset/dataset.csv")
+
+X1 = ds.iloc[:,5:6] # (BF)
 X1 = pd.DataFrame(X1)
 X2 = ds.iloc[:,6:7] # rHpy
 X = pd.concat([X1, X2], axis=1)
 y = ds.iloc[:,7]
 y_w = y
+
 # Seed
 seed = 1337
 np.random.seed(1337)
 
 # Features
 # Secondary Structure Folds (NF1)
-infile = open('../features/NF1/feature/NF1_9.pickle','rb')
+infile = open('../features/NF1/feature/NF1_7.pickle','rb')
 nf1_9 = pickle.load(infile)
 infile.close()
 
@@ -129,10 +131,12 @@ X = pd.concat([X, nf1_9, nf2_5, nf2_6, nf2_7, nf2_8, nf3, nf4_13, nf4_11, nf4_9,
 encoder = LabelEncoder()
 encoder.fit(y)
 encoded_Y = encoder.transform(y)
+counts_df = pd.DataFrame(encoded_Y)
 y = np_utils.to_categorical(encoded_Y)
 print("The classes in y are: " + str(encoder.classes_))
 
 # Make Test Data
+one = datapoints.iloc[18759:18859,:]
 metal_X = X.iloc[18759:18859,:]
 X = X.drop(X.index[18759:18859])
 y_ = pd.DataFrame(y)
@@ -140,18 +144,21 @@ metal_y = y_.iloc[18759:18859]
 y_ = y_.drop(y_.index[18759:18859])
 y_w = y_w.drop(y_w.index[18759:18859])
 
+two = datapoints.iloc[18961:19061,:]
 sulph_X = X.iloc[18961:19061,:]
 sulph_y = y_.iloc[18961:19061]
 X = X.drop(X.index[18961:19061])
 y_ = y_.drop(y_.index[18961:19061])
 y_w = y_w.drop(y_w.index[18961:19061])
 
+three = datapoints.iloc[55170:55270,:]
 dis_X = X.iloc[55170:55270,:]
 dis_y = y_.iloc[55170:55270]
 X = X.drop(X.index[55170:55270])
 y_ = y_.drop(y_.index[55170:55270])
 y_w = y_w.drop(y_w.index[55170:55270])
 
+four = datapoints.iloc[107260:107360,:]
 thio_X = X.iloc[107260:107360,:]
 thio_y = y_.iloc[107260:107360]
 X = X.drop(X.index[107260:107360])
@@ -199,13 +206,13 @@ x = BatchNormalization()(x)
 # Block 2
 z = Dense(256, kernel_initializer = 'glorot_uniform', kernel_regularizer=regularizers.l1_l2(l1=1e-5, l2=1e-4), bias_regularizer=regularizers.l2(1e-4), activity_regularizer=regularizers.l2(1e-5))(x)
 z = LeakyReLU(alpha = 0.05)(z)
-z = Dropout(0.7)(z)
+# z = Dropout(0.1)(z)
 z = BatchNormalization()(z)
 
 # Block 3
 x = Dense(128, kernel_initializer = 'glorot_uniform', kernel_regularizer=regularizers.l1_l2(l1=1e-5, l2=1e-4), bias_regularizer=regularizers.l2(1e-4), activity_regularizer=regularizers.l2(1e-5))(z)
 x = LeakyReLU(alpha = 0.05)(x)
-x = Dropout(0.7)(x)
+# x = Dropout(0.1)(x)
 x = BatchNormalization()(x) 
 
 # Block 4
@@ -214,19 +221,19 @@ z = Dense(128, kernel_initializer = 'glorot_uniform', kernel_regularizer=regular
 sk1 = Add()([x, z])
 z = Dense(64, kernel_initializer = 'glorot_uniform', kernel_regularizer=regularizers.l1_l2(l1=1e-5, l2=1e-4), bias_regularizer=regularizers.l2(1e-4), activity_regularizer=regularizers.l2(1e-5))(sk1)
 z = LeakyReLU(alpha = 0.05)(z)
-z = Dropout(0.7)(z)
+# z = Dropout(0.1)(z)
 z = BatchNormalization()(z)
 
 # Block 5
 x = Dense(32, kernel_initializer = 'glorot_uniform', kernel_regularizer=regularizers.l1_l2(l1=1e-5, l2=1e-4), bias_regularizer=regularizers.l2(1e-4), activity_regularizer=regularizers.l2(1e-5))(z)
 x = LeakyReLU(alpha = 0.05)(x)
-x = Dropout(0.7)(x)
+# x = Dropout(0.1)(x)
 x = BatchNormalization()(x) 
 
 # Block 6
 z = Dense(16, kernel_initializer = 'glorot_uniform', kernel_regularizer=regularizers.l1_l2(l1=1e-5, l2=1e-4), bias_regularizer=regularizers.l2(1e-4), activity_regularizer=regularizers.l2(1e-5))(x)
 z = LeakyReLU(alpha = 0.05)(z)
-z = Dropout(0.7)(z)
+# z = Dropout(0.1)(z)
 z = BatchNormalization()(z)
 
 # Block 7
@@ -236,20 +243,22 @@ sk2 = Add()([z, x])
 x = Dense(8, kernel_initializer = 'glorot_uniform', kernel_regularizer=regularizers.l1_l2(l1=1e-5, l2=1e-4), bias_regularizer=regularizers.l2(1e-4), activity_regularizer=regularizers.l2(1e-5))(sk2)
 x = LeakyReLU(alpha = 0.05)(x)
 x = BatchNormalization()(x) 
-x = Dropout(0.7)(x)
+x = Dropout(0.5)(x)
 x = Dense(4, activation = 'softmax', kernel_regularizer=regularizers.l1_l2(l1=1e-5, l2=1e-4), bias_regularizer=regularizers.l2(1e-4), activity_regularizer=regularizers.l2(1e-5))(x)
 
 model = Model(input_, x)
-model.compile(optimizer = 'adam', loss = 'categorical_crossentropy', metrics=['accuracy'])
+
+opt = keras.optimizers.Adam(learning_rate = 1e-4)
+model.compile(optimizer = opt, loss = 'categorical_crossentropy', metrics=['accuracy'])
 
 # callbacks
 mcp_save = keras.callbacks.callbacks.ModelCheckpoint('ann.h5', save_best_only=True, monitor='val_accuracy', verbose=1)
-reduce_lr = keras.callbacks.callbacks.ReduceLROnPlateau(monitor='val_accuracy', factor=0.1, patience=2, verbose=1, mode='auto', min_delta=0.0001, cooldown=0, min_lr=0)
+reduce_lr = keras.callbacks.callbacks.ReduceLROnPlateau(monitor='val_accuracy', factor=0.1, patience=5, verbose=1, mode='auto', min_delta=0.0001, cooldown=0, min_lr=0)
 callbacks_list = [reduce_lr, mcp_save]
 
 # Training
-weights = {0: 0.31614373, 1: 1.43080227, 2: 46.60362694, 3: 8.58253817}
-history = model.fit(X_train, y_train, batch_size = 256, epochs = 20, validation_data = (X_test, y_test), shuffle = False, callbacks = callbacks_list, class_weight = weights)
+weights = {0: 0.9, 1: 3.5, 2: 48.5, 3: 19.5}
+history = model.fit(X_train, y_train, batch_size = 256, epochs = 50, validation_data = (X_test, y_test), shuffle = False, callbacks = callbacks_list, class_weight = weights)
 
 # Testing
 model = load_model('ann.h5')
@@ -267,8 +276,8 @@ print(matrix)
 print("F1 Score")
 print(f1_score(y_test.argmax(axis=1), y_pred.argmax(axis=1), average = 'weighted'))
 
-# # Plot History
-# # # summarize history for accuracy
+# Plot History
+# summarize history for accuracy
 plt.plot(history.history['accuracy'])
 plt.plot(history.history['val_accuracy'])
 plt.title('model accuracy')
@@ -285,9 +294,204 @@ plt.xlabel('epoch')
 plt.legend(['train', 'test'], loc='upper left')
 plt.show()
 
-'''
-Best Results:
-loss: 2.2564 - accuracy: 0.8142 - val_loss: 1.7841 - val_accuracy: 0.8750
-Accuracy: 0.875
-F1 Score: 0.8656831185553628
-'''
+
+# Benchmark
+# infile = open('benchmark/dis2to25.pickle','rb')
+# features_X = pickle.load(infile)
+# infile.close()
+
+# print(features_X.shape)
+
+# features_X = features_X[:,1:151]
+# features_X = np.delete(features_X, 2, 1)
+# features_X = np.delete(features_X, 2, 1)
+# features_X = np.delete(features_X, 17, 1)
+# features_X = np.delete(features_X, 17, 1)
+# drop_cols = [2,3,19,20]
+
+# print(features_X.shape)
+
+# features_X = np.expand_dims(features_X, axis=2)
+
+# classes_dict = {"0": "disulphide", "1": "metal-binding", "2": "sulphenylation", "3": "thioether"}
+
+# y_pred = model.predict(features_X)
+
+# y_pred = np.asarray(y_pred)
+
+# for i in y_pred:
+#     pred_num = np.argmax(i)
+
+# g = open("benchmark/results_dis.txt", "w")
+# # g.write("##### DeepCys Batch Prediction Results #####\n\n")
+# for i in range(len(y_pred)):
+#     text = classes_dict[str(np.argmax(y_pred[i]))]
+#     g.write(str(text))
+#     g.write("\n")
+
+# g.close()
+
+# infile = open('benchmark/thioether2to25.pickle','rb')
+# features_X = pickle.load(infile)
+# infile.close()
+# features_X = features_X[:,1:151]
+# features_X = np.delete(features_X, 2, 1)
+# features_X = np.delete(features_X, 2, 1)
+# features_X = np.delete(features_X, 17, 1)
+# features_X = np.delete(features_X, 17, 1)
+# features_X = np.expand_dims(features_X, axis=2)
+
+# classes_dict = {"0": "disulphide", "1": "metal-binding", "2": "sulphenylation", "3": "thioether"}
+
+# y_pred = model.predict(features_X)
+
+# y_pred = np.asarray(y_pred)
+
+# for i in y_pred:
+#     pred_num = np.argmax(i)
+
+# g = open("benchmark/results_thio.txt", "w")
+# # g.write("##### DeepCys Batch Prediction Results #####\n\n")
+# for i in range(len(y_pred)):
+#     text = classes_dict[str(np.argmax(y_pred[i]))]
+#     g.write(str(text))
+#     g.write("\n")
+
+# g.close()
+
+# infile = open('benchmark/CSO2to25.pickle','rb')
+# features_X = pickle.load(infile)
+# infile.close()
+# features_X = features_X[:,1:151]
+# features_X = np.delete(features_X, 2, 1)
+# features_X = np.delete(features_X, 2, 1)
+# features_X = np.delete(features_X, 17, 1)
+# features_X = np.delete(features_X, 17, 1)
+# features_X = np.expand_dims(features_X, axis=2)
+
+# classes_dict = {"0": "disulphide", "1": "metal-binding", "2": "sulphenylation", "3": "thioether"}
+
+# y_pred = model.predict(features_X)
+
+# y_pred = np.asarray(y_pred)
+
+# for i in y_pred:
+#     pred_num = np.argmax(i)
+
+# g = open("benchmark/results_cso.txt", "w")
+# # g.write("##### DeepCys Batch Prediction Results #####\n\n")
+# for i in range(len(y_pred)):
+#     text = classes_dict[str(np.argmax(y_pred[i]))]
+#     g.write(str(text))
+#     g.write("\n")
+
+# g.close()
+
+# infile = open('benchmark/metalbinding2to25.pickle','rb')
+# features_X = pickle.load(infile)
+# infile.close()
+# features_X = features_X[:,1:151]
+# features_X = np.delete(features_X, 2, 1)
+# features_X = np.delete(features_X, 2, 1)
+# features_X = np.delete(features_X, 17, 1)
+# features_X = np.delete(features_X, 17, 1)
+# features_X = np.expand_dims(features_X, axis=2)
+
+# classes_dict = {"0": "disulphide", "1": "metal-binding", "2": "sulphenylation", "3": "thioether"}
+
+# y_pred = model.predict(features_X)
+
+# y_pred = np.asarray(y_pred)
+
+# for i in y_pred:
+#     pred_num = np.argmax(i)
+
+# g = open("benchmark/results_mb.txt", "w")
+# # g.write("##### DeepCys Batch Prediction Results #####\n\n")
+# for i in range(len(y_pred)):
+#     text = classes_dict[str(np.argmax(y_pred[i]))]
+#     g.write(str(text))
+#     g.write("\n")
+
+# g.close()
+
+# infile = open('benchmark/DUF.pickle','rb')
+# features_X = pickle.load(infile)
+# infile.close()
+# features_X = features_X[:,1:151]
+# features_X = np.delete(features_X, 2, 1)
+# features_X = np.delete(features_X, 2, 1)
+# features_X = np.delete(features_X, 17, 1)
+# features_X = np.delete(features_X, 17, 1)
+# features_X = np.expand_dims(features_X, axis=2)
+
+# classes_dict = {"0": "disulphide", "1": "metal-binding", "2": "sulphenylation", "3": "thioether"}
+
+# y_pred = model.predict(features_X)
+
+# y_pred = np.asarray(y_pred)
+
+# for i in y_pred:
+#     pred_num = np.argmax(i)
+
+# g = open("results_duf.txt", "w")
+# g.write("##### DeepCys Batch Prediction Results #####\n\n")
+# for i in range(len(y_pred)):
+#     text = classes_dict[str(np.argmax(y_pred[i]))]
+#     g.write(str(text))
+#     g.write("\n")
+
+# g.close()
+
+# # Benchmark Accuracy values
+# f = open("benchmark/results_dis.txt","r")
+# dis_b = []
+# count = 0
+# for line in f:
+#     l = line.replace('\n','')
+#     dis_b.append(l)
+#     if l == 'disulphide':
+#         count += 1
+
+# print("Disulphide Benchmark: ", str(count/len(dis_b)))
+
+# f = open("benchmark/results_mb.txt","r")
+# mb_b = []
+# count = 0
+# for line in f:
+#     l = line.replace('\n','')
+#     mb_b.append(l)
+#     if l == 'metal-binding':
+#         count += 1
+
+# print("Metal-Binding Benchmark: ", str(count/len(mb_b)))
+
+# f = open("benchmark/results_thio.txt","r")
+# thio_b = []
+# count = 0
+# for line in f:
+#     l = line.replace('\n','')
+#     thio_b.append(l)
+#     if l == 'thioether':
+#         count += 1
+
+# print("Thioether Benchmark: ", str(count/len(thio_b)))
+
+# f = open("benchmark/results_cso.txt","r")
+# sul_b = []
+# count = 0
+# for line in f:
+#     l = line.replace('\n','')
+#     sul_b.append(l)
+#     if l == 'sulphenylation':
+#         count += 1
+
+# f = open("benchmark/results_sulph.txt","r")
+# for line in f:
+#     l = line.replace('\n','')
+#     sul_b.append(l)
+#     if l == 'sulphenylation':
+#         count += 1
+
+# print("Sulphenylation Benchmark: ", str(count/len(sul_b)))
+

@@ -14,19 +14,17 @@ from sklearn.preprocessing import StandardScaler, LabelEncoder
 
 # Tasks
 # Separate window sizes (3, 5, 7, 9, 11, 13)
-window = 13
+window = 9
 
 # dataset import and preprocessing
-ds = pd.read_csv('../../data/correct_data/dataset.csv')
+ds = pd.read_csv('../../dataset/dataset.csv')
 pdb = list(ds.iloc[:,1].values)
 new_pdb = []
 for i in pdb:
 	i = i.replace('.pdb', '')
 	new_pdb.append(i)
 
-# print(new_pdb)
 pdb = new_pdb
-# print(pdb)
 res = ds.iloc[:,2]
 chain = ds.iloc[:,3]
 
@@ -64,7 +62,6 @@ for i in range(len(pdb)):
 				dssp = dssp_dict_from_pdb_file(file)
 				last_dssp = dssp
 		dssp = dssp[0]
-		# print(dssp)
 		ssf = []
 		start = res[i] - window
 		end = res[i] + window
@@ -94,8 +91,8 @@ for i in range(len(pdb)):
 		print(ssf, i, len(pdb))
 	ssf_list.append(ssf)
 
-# # Pickle
-filename = 'feature/NF1_' + str(window) + '.pickle'
+# Pickle
+filename = 'NF1_' + str(window) + '.pickle'
 outfile = open(filename,'wb')
 pickle.dump(ssf_list,outfile)
 outfile.close()

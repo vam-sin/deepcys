@@ -5,6 +5,8 @@ from tensorflow.keras.models import load_model
 from sklearn.preprocessing import StandardScaler, LabelEncoder, normalize
 from sklearn.metrics import confusion_matrix, accuracy_score, f1_score
 from keras.utils import to_categorical, np_utils
+from tqdm import tqdm
+import pickle
 
 # GPU
 import tensorflow as tf
@@ -34,40 +36,43 @@ if gpus:
         # Virtual devices must be set before GPUs have been initialized
         print(e)
 
-# read from data.txt
+# # read from data.txt
 pdb = []
 res = []
 chain = []
 f = open("data.txt", "r")
 for line in f:
     line_split = line.split(',')
+    new_line_split = []
+    for el in line_split:
+        if el != ' ' and el != '':
+            new_line_split.append(el)
+    line_split = new_line_split
     pdb.append(line_split[0])
-    res.append(int(line_split[1]))
+    res.append(int(line_split[1].replace(' ', '')))
     chain.append(line_split[2].replace("\n", '').replace(' ', ''))
-    print(line_split)
-
-print(pdb, res, chain)
 
 # feature gen
 features_X = []
 
-for i in range(len(pdb)):
+for i in tqdm(range(len(pdb))):
 	print("####################")
 	print(i+1, " Out of ", len(pdb))
 	print("####################")
 	features_X.append(get_features(pdb[i].replace(' ',''), res[i], chain[i]))
 
 features_X = np.asarray(features_X)
+
 features_X = np.expand_dims(features_X, axis=2)
 
 classes_dict = {"0": "disulphide", "1": "metal-binding", "2": "sulphenylation", "3": "thioether"}
 
-model = load_model('ann_875.h5')
+# load model and predictions
+model = load_model('ann_90.h5')
 
 y_pred = model.predict(features_X)
 
 y_pred = np.asarray(y_pred)
-print(y_pred)
 
 for i in y_pred:
     pred_num = np.argmax(i)
@@ -75,8 +80,8 @@ for i in y_pred:
 
 g = open("results.txt", "w")
 g.write("##### DeepCys Batch Prediction Results #####\n\n")
-for i in range(len(pdb)):
-    text = pdb[i] + ", " + str(res[i]) + ", " + chain[i] + ": " + classes_dict[str(np.argmax(y_pred[i]))]
+for i in range(len(y_pred)):
+    text = classes_dict[str(np.argmax(y_pred[i]))]
     print(str(text))
     g.write(str(text))
     g.write("\n")
