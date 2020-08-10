@@ -1,3 +1,6 @@
+'''
+Model training with 100% non-redundant training data
+'''
 # Libraries
 import pandas as pd
 import numpy as np
@@ -71,52 +74,52 @@ seed = 1337
 np.random.seed(1337)
 
 # Features
-# Secondary Structure Folds (NF1)
-infile = open('../features/NF1/feature/NF1_7.pickle','rb')
+# Secondary Structure Folds 
+infile = open('../features/SSF/feature/NF1_7.pickle','rb')
 nf1_9 = pickle.load(infile)
 infile.close()
 
-# # Amino Acid Signatures in the Interaction Shells (NF2)
-infile = open('../features/NF2/feature/NF2_8.pickle','rb')
+# # Amino Acid Signatures in the Interaction Shells 
+infile = open('../features/AASIS/feature/NF2_8.pickle','rb')
 nf2_8 = pickle.load(infile)
 infile.close()
-infile = open('../features/NF2/feature/NF2_7.pickle','rb')
+infile = open('../features/AASIS/feature/NF2_7.pickle','rb')
 nf2_7 = pickle.load(infile)
 infile.close()
-infile = open('../features/NF2/feature/NF2_6.pickle','rb')
+infile = open('../features/AASIS/feature/NF2_6.pickle','rb')
 nf2_6 = pickle.load(infile)
 infile.close()
-infile = open('../features/NF2/feature/NF2_5.pickle','rb')
+infile = open('../features/AASIS/feature/NF2_5.pickle','rb')
 nf2_5 = pickle.load(infile)
 infile.close()
 
-# # # Protein Class features (NF3)
-infile = open('../features/NF3/feature/NF3_le.pickle','rb')
+# # Enzyme Class
+infile = open('../features/EC/feature/NF3_le.pickle','rb')
 nf3 = pickle.load(infile)
 infile.close()
 
-# # # # Motif (NF4)
-infile = open('../features/NF4/feature/NF4_13.pickle','rb')
+# # Motifs 
+infile = open('../features/Motifs/feature/NF4_13.pickle','rb')
 nf4_13 = pickle.load(infile)
 infile.close()
 
-infile = open('../features/NF4/feature/NF4_11.pickle','rb')
+infile = open('../features/Motifs/feature/NF4_11.pickle','rb')
 nf4_11 = pickle.load(infile)
 infile.close()
 
-infile = open('../features/NF4/feature/NF4_9.pickle','rb')
+infile = open('../features/Motifs/feature/NF4_9.pickle','rb')
 nf4_9 = pickle.load(infile)
 infile.close()
 
-infile = open('../features/NF4/feature/NF4_7.pickle','rb')
+infile = open('../features/Motifs/feature/NF4_7.pickle','rb')
 nf4_7 = pickle.load(infile)
 infile.close()
 
-infile = open('../features/NF4/feature/NF4_5.pickle','rb')
+infile = open('../features/Motifs/feature/NF4_5.pickle','rb')
 nf4_5 = pickle.load(infile)
 infile.close()
 
-infile = open('../features/NF4/feature/NF4_3.pickle','rb')
+infile = open('../features/Motifs/feature/NF4_3.pickle','rb')
 nf4_3 = pickle.load(infile)
 infile.close()
 

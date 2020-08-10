@@ -1,3 +1,7 @@
+'''
+Feature Generation File
+'''
+# libraries
 import os
 from Bio.PDB.DSSP import dssp_dict_from_pdb_file
 import numpy as np
@@ -10,10 +14,12 @@ from sklearn.preprocessing import LabelEncoder
 from seq_extract import get_sequence
 import re
 
-def get_nf1(pdb, res, chain, nf1_window): # Secondary Structure Folds
+def get_nf1(pdb, res, chain, nf1_window): 
+	# Secondary Structure Folds
 	try:
 		PROJECT_PATH = os.path.dirname(__file__) + "/"
 		filename_pdb = PROJECT_PATH + '/PDB_Data/' + pdb + '.pdb'
+		# use dssp tool to make ssf predictions
 		dssp = dssp_dict_from_pdb_file(filename_pdb)
 		dssp = dssp[0]
 		nf1 = []
@@ -45,7 +51,8 @@ def get_nf1(pdb, res, chain, nf1_window): # Secondary Structure Folds
 	except:
 		return np.zeros(nf1_window*2 + 1, dtype = int)
 
-def get_nf2(pdb, res, chain): # Amino Acid Signatures in Interaction Shells
+def get_nf2(pdb, res, chain): 
+	# Amino Acid Signatures in Interaction Shells
 	nf2_8_single = np.zeros(20, dtype = int)
 	nf2_7_single = np.zeros(20, dtype = int)
 	nf2_6_single = np.zeros(20, dtype = int)
@@ -243,7 +250,8 @@ def get_nf2(pdb, res, chain): # Amino Acid Signatures in Interaction Shells
 
 	return nf2_8_single, nf2_7_single, nf2_6_single, nf2_5_single
 
-def get_nf3(pdb): # Enzyme Class
+def get_nf3(pdb): 
+	# Enzyme Class
 	try:
 		PROJECT_PATH = os.path.dirname(__file__) + "/"
 		path_ = PROJECT_PATH + '/PDB_Data/' + pdb + '.pdb'
@@ -262,7 +270,6 @@ def get_nf3(pdb): # Enzyme Class
 			ind_func = ''
 			for j in range(5):
 				ind_func += x[j]
-				# ind_func += ' '
 			print(ind_func)
 			nf3 = le.transform([ind_func])
 
@@ -277,7 +284,8 @@ def get_nf3(pdb): # Enzyme Class
 
 		return [999]
 
-def get_nf4(pdb, res, chain, window): # Motifs
+def get_nf4(pdb, res, chain, window): 
+	# Motifs
 	sing_motif = np.zeros(8)
 	file1 = 'PDB_Data/' + pdb.upper() +'.pdb'
 	file2 = 'PDB_Data/' + pdb.lower() +'.pdb'
@@ -286,6 +294,7 @@ def get_nf4(pdb, res, chain, window): # Motifs
 	else:
 		string = get_sequence(file2, res, chain, window)
 	
+	# check presence of the motifs
 	if len(re.findall(r"CC", string)) > 0:
 		sing_motif[0] = 1.0
 	if len(re.findall(r"C[A-Z]C", string)) > 0:

@@ -1,6 +1,10 @@
+'''
+Batch Predition File for Structure Based Prediction
+'''
+# libraries
 import pandas as pd 
 import numpy as np 
-from get_151_features import get_features
+from get_146_features import get_features
 from tensorflow.keras.models import load_model
 from sklearn.preprocessing import StandardScaler, LabelEncoder, normalize
 from sklearn.metrics import confusion_matrix, accuracy_score, f1_score
@@ -36,7 +40,7 @@ if gpus:
         # Virtual devices must be set before GPUs have been initialized
         print(e)
 
-# # read from data.txt
+# read input from data.txt
 pdb = []
 res = []
 chain = []
@@ -67,7 +71,7 @@ features_X = np.expand_dims(features_X, axis=2)
 
 classes_dict = {"0": "disulphide", "1": "metal-binding", "2": "sulphenylation", "3": "thioether"}
 
-# load model and predictions
+# load model and make predictions
 model = load_model('ann_90.h5')
 
 y_pred = model.predict(features_X)
@@ -78,6 +82,7 @@ for i in y_pred:
     pred_num = np.argmax(i)
     print(classes_dict[str(pred_num)])
 
+# write predictions to file
 g = open("results.txt", "w")
 g.write("##### DeepCys Batch Prediction Results #####\n\n")
 for i in range(len(y_pred)):

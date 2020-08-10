@@ -1,8 +1,15 @@
+'''
+Buried Fraction and rHpy computation file.
+'''
+# libraries
 import os
 import random
 import os.path
 
 def remove_files(pdb):
+	'''
+	Removes extra files generated during the computation
+	'''
 	try:
 		cmd = 'rm combined.txt'
 		os.system(cmd)
@@ -189,6 +196,8 @@ def get_bf_rhpy(pdb, res, chain):
 	try:
 		print(res, chain)
 		PROJECT_PATH = os.path.dirname(__file__) + "/"
+
+		# obtain file after download
 		pdbfile = PROJECT_PATH + 'PDB_Data/' + pdb + '.pdb'
 
 		list_file = os.path.join(PROJECT_PATH, 'menv_server', 'list')
@@ -236,6 +245,7 @@ def get_bf_rhpy(pdb, res, chain):
 				print("New Menv Failed")
 
 			try:
+				# running the renumber scipt in case it failed to execute
 				print("Try Running Renumber")
 				renumber_script = os.path.join(PROJECT_PATH, 'menv_server', 'newrenumber.sh')
 				psf_file = PROJECT_PATH + 'PDB_Data/' + pdb + '-psf.menv'
@@ -263,6 +273,7 @@ def get_bf_rhpy(pdb, res, chain):
 				print("Renumber failed")
 
 			try:
+				# new menv is not present, hence taking value from psf menv
 				print("Basic psf because new menv renumber also failed")
 				result_file = os.path.join(PROJECT_PATH, 'PDB_Data', pdb + '-psf.menv')
 				f = open(result_file, "r")
@@ -287,6 +298,7 @@ def get_bf_rhpy(pdb, res, chain):
 			return random.uniform(0, 1), random.uniform(0, 1)
 
 		else:
+			# if new menv is already present then extract from it.
 			print("First time New Menv")
 			f = open(result_file, "r")
 			for x in f:

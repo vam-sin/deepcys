@@ -1,3 +1,6 @@
+'''
+Extract primary sequence from pdb file
+'''
 # Get required sequence from the pdb structure
 
 def three_to_one(aa):
@@ -73,7 +76,6 @@ def get_sequence(pdb, res, chain, window):
 									for mod in mod_types:
 										if mod in aa:
 											sequence += 'C'
-											print("MOD RES SLAYING")
 											break
 							break
 						except:

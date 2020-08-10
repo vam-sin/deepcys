@@ -1,3 +1,6 @@
+'''
+Calculate weights for weighted cross entropy loss function
+'''
 import pandas as pd 
 from sklearn.utils import class_weight
 import numpy as np
