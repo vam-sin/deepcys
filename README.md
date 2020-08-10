@@ -1,5 +1,8 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+<p align="center">
+  <img width="460" height="300" src="downloads/logo.png">
+</p>
 ![alt tag](downloads/logo.png)
 
 # Deepcys Structure
