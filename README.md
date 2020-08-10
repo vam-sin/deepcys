@@ -1,6 +1,6 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-# deepcys
+# Deepcys Structure
 A complete Deep Learning solution to predicting the behavior of a given cysteine. The predictions are made using the features from the high resolution protein crystal structures.
 
 # Requirements
@@ -31,42 +31,42 @@ javaws pdb.jnlp
 
 In /src/model/features.
 
-## NF1 
+## Secondary Structure Folds
 
-Folder NF1. 
+Folder SSF. 
 Create a folder named feature.
-Set the window size to 9 and run the command.
+Set the window size to 7 and run the command.
 
 ```python3
-python3 NF1_gen.py
+python3 ssf_gen.py
 ```
 
-## NF2
+## Amino Acid Signatures in Interaction Shells
 
-Folder NF2. 
-Create a folder named feature.
-
-```python3
-python3 NF2_gen.py
-```
-
-## NF3
-
-Folder NF3. 
+Folder AASIS. 
 Create a folder named feature.
 
 ```python3
-python3 NF3_gen.py
+python3 aasis_gen.py
 ```
 
-## NF4
+## Enzyme Class
 
-Folder NF4. 
+Folder EC. 
+Create a folder named feature.
+
+```python3
+python3 ec_gen.py
+```
+
+## Motifs
+
+Folder Motifs. 
 Create a folder named feature.
 Run the following command for the window sizes [3, 5, 7, 9, 11, 13] 
 
 ```python3
-python3 NF4_gen.py
+python3 motif_gen.py
 ```
 
 # Model Training
@@ -75,16 +75,16 @@ python3 NF4_gen.py
 
 Folder /src/model/nn.
 
+The folder cd-hit had the results from the CD-HIT server which contain the representative sequences for 30% and 100% redundancy.
+
+ann.py is the training file for the entire training dataset.
+ann_redundancy.py is the training file for 30% non-redundant training dataset.
+ann_identity.py is the training file for 100% non-redundant training dataset.
+
 ```python3
 python3 ann.py
-```
-
-## Sequence Based Prediction
-
-Folder /src/model/nn.
-
-```python3
-python3 gru.py
+python3 ann_redundancy.py
+python3 ann_identity.py
 ```
 
 # Batch Prediction
@@ -110,13 +110,4 @@ python3 batch_pred.py
 
 In a file named "results.txt", the results from the batch prediction will be stored.
 
-## Sequence Based Prediction
-
-Folder /src/batch_pred_seq.
-In the file named "data.txt", mention the tuple of [PDB ID, Residue Number, Chain]. One in a line. Run the following command.
-
-```python3
-python3 batch_pred_seq.py
-```
-
-In a file named "results.txt", the results from the batch prediction will be stored.
+An example residue is already mentioned in the data.txt for reference. 
