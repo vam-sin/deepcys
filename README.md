@@ -87,6 +87,8 @@ python3 ann_redundancy.py
 python3 ann_identity.py
 ```
 
+The results mentioned in the paper can be replicated by using the pre-trained models available [here](https://drive.google.com/drive/folders/1Hu_P80OheLdSDpRqPcECbdua1kTjv8Vx?usp=sharing).
+
 # Batch Prediction
 
 ## Structure Based Prediction
