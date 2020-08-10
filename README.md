@@ -1,11 +1,6 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-<p align="center">
-  <img width="50" height="50" src="downloads/logo.png">
-</p>
-![alt tag](downloads/logo.png)
-
-# Deepcys Structure
+# ![alt tag](downloads/logo.png) Deepcys Structure
 A complete Deep Learning solution to predicting the behavior of a given cysteine. The predictions are made using the features from the high resolution protein crystal structures.
 
 # Requirements
