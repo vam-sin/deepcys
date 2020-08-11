@@ -3,7 +3,7 @@
 # Deepcys Structure <img width="30" height="30" src="downloads/logo.png">
 A complete Deep Learning solution to predicting the behavior of a given cysteine. The predictions are made using the features from the high resolution protein crystal structures.
 
-This model can also be accessed via a web server which can be found [here](cysteine.herokuapp.com).
+This model can also be accessed via a web server which can be found [here](http://cysteine.herokuapp.com).
 
 # Requirements
 
