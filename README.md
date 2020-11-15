@@ -115,3 +115,9 @@ python3 batch_pred.py
 In a file named "results.txt", the results from the batch prediction will be stored.
 
 An example residue is already mentioned in the data.txt for reference. 
+
+# Paper
+
+```
+Vamsi Mohan Nallapareddy, Shubham Rajendra Bogam, Himaja Devarakonda, et al. DeepCys: structure-based multiple cysteine function prediction method trained on deep neural network: case study on Domains of Unknown Functions (DUFs) belonging to COX2 family. Authorea. October 16, 2020.
+```
