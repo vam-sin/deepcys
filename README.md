@@ -119,14 +119,5 @@ An example residue is already mentioned in the data.txt for reference.
 # Paper
 
 ```
-@article{Nallapareddy_2020,
-	doi = {10.22541/au.160283711.13239616/v1},
-	url = {https://doi.org/10.22541%2Fau.160283711.13239616%2Fv1},
-	year = 2020,
-	month = {oct},
-	publisher = {Authorea,
-Inc.},
-	author = {Vamsi Mohan Nallapareddy and Shubham Rajendra Bogam and Himaja Devarakonda and Shubham Paliwal and Debashree Bandyopadhyay},
-	title = {{DeepCys}: structure-based multiple cysteine function prediction method trained on deep neural network: case study on Domains of Unknown Functions ({DUFs}) belonging to {COX}2 family}
-}
+Nallapareddy, V, Bogam, S, Devarakonda, H, Paliwal, S, Bandyopadhyay, D. DeepCys: Structure‐based multiple cysteine function prediction method trained on deep neural network: Case study on domains of unknown functions belonging to COX2 domains. Proteins. 2021; 1– 17. https://doi.org/10.1002/prot.26056
 ```
