@@ -119,5 +119,17 @@ An example residue is already mentioned in the data.txt for reference.
 # Paper
 
 ```
-Nallapareddy, V, Bogam, S, Devarakonda, H, Paliwal, S, Bandyopadhyay, D. DeepCys: Structure‐based multiple cysteine function prediction method trained on deep neural network: Case study on domains of unknown functions belonging to COX2 domains. Proteins. 2021; 1– 17. https://doi.org/10.1002/prot.26056
+@article{https://doi.org/10.1002/prot.26056,
+author = {Nallapareddy, Vamsi and Bogam, Shubham and Devarakonda, Himaja and Paliwal, Shubham and Bandyopadhyay, Debashree},
+title = {DeepCys: Structure-based multiple cysteine function prediction method trained on deep neural network: Case study on domains of unknown functions belonging to COX2 domains},
+journal = {Proteins: Structure, Function, and Bioinformatics},
+volume = {n/a},
+number = {n/a},
+pages = {},
+keywords = {deep neural network, multiple cysteine function prediction, protein structure and sequence feature},
+doi = {https://doi.org/10.1002/prot.26056},
+url = {https://onlinelibrary.wiley.com/doi/abs/10.1002/prot.26056},
+eprint = {https://onlinelibrary.wiley.com/doi/pdf/10.1002/prot.26056},
+abstract = {Abstract Cysteine (Cys) is the most reactive amino acid participating in a wide range of biological functions. In-silico predictions complement the experiments to meet the need of functional characterization. Multiple Cys function prediction algorithm is scarce, in contrast to specific function prediction algorithms. Here we present a deep neural network-based multiple Cys function prediction, available on web-server (DeepCys) (https://deepcys.herokuapp.com/). DeepCys model was trained and tested on two independent datasets curated from protein crystal structures. This prediction method requires three inputs, namely, PDB identifier (ID), chain ID and residue ID for a given Cys and outputs the probabilities of four cysteine functions, namely, disulphide, metal-binding, thioether and sulphenylation and predicts the most probable Cys function. The algorithm exploits the local and global protein properties, like, sequence and secondary structure motifs, buried fractions, microenvironments and protein/enzyme class. DeepCys outperformed most of the multiple and specific Cys function algorithms. This method can predict maximum number of cysteine functions. Moreover, for the first time, explicitly predicts thioether function. This tool was used to elucidate the cysteine functions on domains of unknown functions belonging to cytochrome C oxidase subunit-II like transmembrane domains. Apart from the web-server, a standalone program is also available on GitHub (https://github.com/vam-sin/deepcys).}
+}
 ```
