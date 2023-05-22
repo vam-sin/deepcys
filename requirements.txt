@@ -3,7 +3,7 @@ h5py==2.10.0
 Keras==2.3.1
 livelossplot==0.5.0
 PROPKA==3.1.0
-requests==2.22.0
+requests==2.31.0
 scikit-image==0.16.2
 scikit-learn==0.22.2.post1
 scipy==1.4.1
